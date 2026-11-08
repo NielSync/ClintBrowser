@@ -8,7 +8,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
@@ -24,6 +23,7 @@ import com.jhaiian.clint.crash.CrashHandler
 import com.jhaiian.clint.ui.DocumentViewer
 import com.jhaiian.clint.ui.OverlayHostActivity
 import com.jhaiian.clint.util.LocaleHelper
+import com.jhaiian.clint.ui.ClintToast
 
 class SetupActivity : ClintActivity(), OverlayHostActivity {
 
@@ -125,11 +125,11 @@ class SetupActivity : ClintActivity(), OverlayHostActivity {
                 },
                 onHideStatusBarToggled = { checked ->
                     uiState.hideStatusBar = checked
-                    Toast.makeText(this, getString(R.string.setup_status_bar_applied_later), Toast.LENGTH_SHORT).show()
+                    ClintToast.show(this, getString(R.string.setup_status_bar_applied_later))
                 },
                 onHideSystemNavigationToggled = { checked ->
                     uiState.hideSystemNavigation = checked
-                    Toast.makeText(this, getString(R.string.setup_status_bar_applied_later), Toast.LENGTH_SHORT).show()
+                    ClintToast.show(this, getString(R.string.setup_status_bar_applied_later))
                 },
                 onThemeSelected = { theme -> onSetupThemeSelected(theme) },
                 onAccentSelected = { accent -> onSetupAccentSelected(accent) },

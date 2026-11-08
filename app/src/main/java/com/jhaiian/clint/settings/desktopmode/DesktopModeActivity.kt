@@ -1,7 +1,6 @@
 package com.jhaiian.clint.settings.desktopmode
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -33,6 +32,7 @@ import com.jhaiian.clint.settings.site.SiteListScreen
 import com.jhaiian.clint.settings.site.SiteListUiState
 import com.jhaiian.clint.ui.theme.ClintComposeTheme
 import com.jhaiian.clint.ui.theme.LocalClintColors
+import com.jhaiian.clint.ui.ClintToast
 
 class DesktopModeActivity : ClintActivity() {
 
@@ -129,7 +129,7 @@ class DesktopModeActivity : ClintActivity() {
                                 listState.selectedOrigins.forEach { origin -> SitePermissionManager.deleteEntry(this@DesktopModeActivity, origin, type) }
                                 listState.removeSelectedItems()
                                 listState.deleteConfirmOpen = false
-                                Toast.makeText(this@DesktopModeActivity, getString(R.string.desktop_mode_items_deleted), Toast.LENGTH_SHORT).show()
+                                ClintToast.show(this@DesktopModeActivity, getString(R.string.desktop_mode_items_deleted))
                             },
                             onDismiss = { listState.deleteConfirmOpen = false }
                         )

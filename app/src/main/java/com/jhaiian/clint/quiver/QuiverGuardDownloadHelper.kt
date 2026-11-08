@@ -1,10 +1,10 @@
 package com.jhaiian.clint.quiver
 
-import android.widget.Toast
 
 import com.jhaiian.clint.R
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
+import com.jhaiian.clint.ui.ClintToast
 
 internal fun QuiverGuardActivity.startFilterListDownload(filterList: FilterList) {
 
@@ -48,17 +48,17 @@ internal fun QuiverGuardActivity.startFilterListDownload(filterList: FilterList)
             }
             uiState.downloadProgress = null
             if (didSucceed) {
-                Toast.makeText(activity, getString(R.string.quiver_guard_download_success_toast, filterList.name), Toast.LENGTH_SHORT).show()
+                ClintToast.show(activity, getString(R.string.quiver_guard_download_success_toast, filterList.name))
             } else {
-                Toast.makeText(activity, getString(R.string.quiver_guard_download_error_toast, filterList.name), Toast.LENGTH_SHORT).show()
+                ClintToast.show(activity, getString(R.string.quiver_guard_download_error_toast, filterList.name))
             }
         } catch (e: CancellationException) {
             uiState.downloadProgress = null
-            Toast.makeText(activity, getString(R.string.quiver_guard_download_cancelled_toast), Toast.LENGTH_SHORT).show()
+            ClintToast.show(activity, getString(R.string.quiver_guard_download_cancelled_toast))
             throw e
         } catch (e: FilterListDownloadException) {
             uiState.downloadProgress = null
-            Toast.makeText(activity, e.message ?: getString(R.string.quiver_guard_download_error_toast, filterList.name), Toast.LENGTH_SHORT).show()
+            ClintToast.show(activity, e.message ?: getString(R.string.quiver_guard_download_error_toast, filterList.name))
         } finally {
             markDownloading(filterList.id, false)
         }

@@ -1,10 +1,10 @@
 package com.jhaiian.clint.browser.delegates
 
-import android.widget.Toast
 import com.jhaiian.clint.R
 import com.jhaiian.clint.browser.MainActivity
 import com.jhaiian.clint.browser.dialogs.RefreshLinkDialogRequest
 import com.jhaiian.clint.downloads.ClintDownloadManager
+import com.jhaiian.clint.ui.ClintToast
 
 internal fun MainActivity.showRefreshLinkDownloadDialog(
     url: String,
@@ -19,7 +19,7 @@ internal fun MainActivity.showRefreshLinkDownloadDialog(
         existingFilename = session.filename,
         onUpdateExisting = {
             ClintDownloadManager.updateDownloadUrl(session.downloadId, url, referer, cookies, pageUrl)
-            Toast.makeText(this, getString(R.string.refresh_link_updated_toast, session.filename), Toast.LENGTH_SHORT).show()
+            ClintToast.show(this, getString(R.string.refresh_link_updated_toast, session.filename))
             refreshLinkSession = null
         },
         onAddNew = { showDownloadDialog(url, filename, userAgent, referer, cookies, pageUrl = pageUrl) }

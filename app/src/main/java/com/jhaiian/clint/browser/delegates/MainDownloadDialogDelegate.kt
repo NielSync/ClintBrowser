@@ -4,7 +4,6 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Intent
 import android.net.Uri
-import android.widget.Toast
 import androidx.preference.PreferenceManager
 import com.jhaiian.clint.R
 import com.jhaiian.clint.browser.MainActivity
@@ -20,6 +19,7 @@ import com.jhaiian.clint.downloads.DownloadsActivity
 import com.jhaiian.clint.settings.downloads.DownloadSettingsKeys
 import com.jhaiian.clint.ui.showClintSnackbar
 import com.jhaiian.clint.ui.theme.ClintComposeTheme
+import com.jhaiian.clint.ui.ClintToast
 
 internal fun MainActivity.showDownloadDialog(
     url: String,
@@ -124,7 +124,7 @@ internal fun MainActivity.downloadBase64Blob(base64: String, filename: String, m
         val blob = com.jhaiian.clint.downloads.DownloadBlobStore.fromBase64(appContext, base64)
         runOnUiThread {
             when {
-                blob == null -> Toast.makeText(appContext, R.string.download_response_failed, Toast.LENGTH_SHORT).show()
+                blob == null -> ClintToast.show(appContext, R.string.download_response_failed)
                 isFinishing || isDestroyed -> ClintDownloadManager.enqueueBlob(appContext, blob, filename, mimeType)
                 else -> showDownloadDialogForBlob(blob, filename, mimeType, forceQuick)
             }
@@ -154,7 +154,7 @@ internal fun MainActivity.copyDownloadRequestLink(text: String) {
     val clipboard = getSystemService(ClipboardManager::class.java)
     clipboard.setPrimaryClip(ClipData.newPlainText(getString(R.string.download_dialog_link_clip_label), text))
     if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.TIRAMISU) {
-        Toast.makeText(this, getString(R.string.download_dialog_link_copied), Toast.LENGTH_SHORT).show()
+        ClintToast.show(this, getString(R.string.download_dialog_link_copied))
     }
 }
 

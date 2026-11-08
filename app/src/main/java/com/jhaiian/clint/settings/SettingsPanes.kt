@@ -83,6 +83,7 @@ import com.jhaiian.clint.util.MEASUREMENT_SYSTEM_DECIMAL
 import com.jhaiian.clint.util.PREF_MEASUREMENT_SYSTEM
 import com.jhaiian.clint.util.setMeasurementSystemDecimal
 import kotlinx.coroutines.launch
+import com.jhaiian.clint.ui.ClintToast
 
 private const val PREF_DO_NOT_TRACK = "do_not_track"
 private const val DEFAULT_DO_NOT_TRACK = true
@@ -475,7 +476,7 @@ fun BrowserSettingsPane(activity: SettingsActivity, onTranslationsClick: () -> U
                         .apply()
                     uiState.homepageDesign = HOMEPAGE_DESIGN_IMAGE
                 } else {
-                    android.widget.Toast.makeText(activity, R.string.homepage_image_error, android.widget.Toast.LENGTH_SHORT).show()
+                    ClintToast.show(activity, R.string.homepage_image_error)
                 }
             }
         }
@@ -848,7 +849,7 @@ fun PrivacySettingsPane(activity: SettingsActivity) {
         },
         onAppLockClick = {
             if (!uiState.appLock && !com.jhaiian.clint.backup.BackupAuthGate.isAuthenticationAvailable(activity)) {
-                android.widget.Toast.makeText(activity, R.string.app_lock_unavailable, android.widget.Toast.LENGTH_LONG).show()
+                ClintToast.show(activity, R.string.app_lock_unavailable, longDuration = true)
             } else {
                 toggle(com.jhaiian.clint.privacy.PrivacyPrefs.APP_LOCK, uiState.appLock) { uiState.appLock = it }
             }
@@ -871,7 +872,7 @@ fun PrivacySettingsPane(activity: SettingsActivity) {
         onAutofillClick = { toggle(com.jhaiian.clint.browser.webview.ClintAutofill.PREF_AUTOFILL_ENABLED, uiState.autofillEnabled) { uiState.autofillEnabled = it } },
         onAutofillServiceClick = {
             if (!com.jhaiian.clint.browser.webview.ClintAutofill.openServicePicker(activity)) {
-                android.widget.Toast.makeText(activity, R.string.autofill_service_open_failed, android.widget.Toast.LENGTH_LONG).show()
+                ClintToast.show(activity, R.string.autofill_service_open_failed, longDuration = true)
             }
         },
         onHistoryClick = { activity.startActivity(Intent(activity, HistoryActivity::class.java)) },
@@ -1153,7 +1154,7 @@ fun DebugPane(activity: SettingsActivity) {
         clipboardManager.setPrimaryClip(android.content.ClipData.newPlainText("Clint Crash Report", clipped))
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
             val msg = if (truncated) activity.getString(R.string.crash_copied_truncated) else activity.getString(R.string.crash_copied)
-            android.widget.Toast.makeText(activity, msg, android.widget.Toast.LENGTH_SHORT).show()
+            ClintToast.show(activity, msg)
         }
     }
 
@@ -1189,7 +1190,7 @@ fun DebugPane(activity: SettingsActivity) {
             val clipboardManager = activity.getSystemService(Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager
             clipboardManager.setPrimaryClip(android.content.ClipData.newPlainText("Bug Report Template", uiState.reportTemplate))
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
-                android.widget.Toast.makeText(activity, activity.getString(R.string.crash_template_copied), android.widget.Toast.LENGTH_SHORT).show()
+                ClintToast.show(activity, activity.getString(R.string.crash_template_copied))
             }
         },
         onOpenGithub = {

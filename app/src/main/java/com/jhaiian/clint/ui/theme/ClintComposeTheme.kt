@@ -44,7 +44,7 @@ val LocalClintColors = compositionLocalOf<ClintColors> {
     error("ClintComposeTheme not applied")
 }
 
-private fun ClintColors(resolved: ClintResolvedTheme) = ClintColors(
+internal fun ClintColors(resolved: ClintResolvedTheme) = ClintColors(
     background = resolved.background,
     onSurface = resolved.onSurface,
     secondaryText = resolved.secondaryText,

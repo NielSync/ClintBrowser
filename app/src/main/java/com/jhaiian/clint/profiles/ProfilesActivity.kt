@@ -1,7 +1,6 @@
 package com.jhaiian.clint.profiles
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.mutableStateListOf
 import androidx.core.view.WindowCompat
@@ -12,6 +11,7 @@ import com.jhaiian.clint.shortcuts.ShortcutStore
 import com.jhaiian.clint.tabs.TabSessionManager
 import com.jhaiian.clint.ui.rememberMaxContentWidth
 import com.jhaiian.clint.ui.theme.ClintComposeTheme
+import com.jhaiian.clint.ui.ClintToast
 
 class ProfilesActivity : ClintActivity() {
 
@@ -49,7 +49,7 @@ class ProfilesActivity : ClintActivity() {
                     },
                     onClearData = { profile ->
                         WebProfiles.clearData(profile.id)
-                        Toast.makeText(this@ProfilesActivity, R.string.profiles_data_cleared, Toast.LENGTH_SHORT).show()
+                        ClintToast.show(this@ProfilesActivity, R.string.profiles_data_cleared)
                     },
                     onDelete = { profile ->
                         val result = WebProfiles.deleteProfileData(profile.id)

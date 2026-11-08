@@ -1,12 +1,12 @@
 package com.jhaiian.clint.downloads
 
 import android.net.Uri
-import android.widget.Toast
 import androidx.preference.PreferenceManager
 import com.jhaiian.clint.R
 import com.jhaiian.clint.settings.downloads.DownloadSettingsKeys
 import com.jhaiian.clint.ui.showClintSnackbar
 import com.jhaiian.clint.ui.theme.ClintComposeTheme
+import com.jhaiian.clint.ui.ClintToast
 
 internal fun DownloadsActivity.showRedownloadDialog(item: DownloadItem) {
     val prefs = PreferenceManager.getDefaultSharedPreferences(this)
@@ -82,7 +82,7 @@ private fun DownloadsActivity.copyRedownloadLink(url: String) {
     val clipboard = getSystemService(android.content.ClipboardManager::class.java)
     clipboard.setPrimaryClip(android.content.ClipData.newPlainText(getString(R.string.download_dialog_link_clip_label), url))
     if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.TIRAMISU) {
-        Toast.makeText(this, getString(R.string.download_dialog_link_copied), Toast.LENGTH_SHORT).show()
+        ClintToast.show(this, getString(R.string.download_dialog_link_copied))
     }
 }
 

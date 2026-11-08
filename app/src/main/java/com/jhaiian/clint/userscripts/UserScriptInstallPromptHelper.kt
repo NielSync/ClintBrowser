@@ -1,6 +1,5 @@
 package com.jhaiian.clint.userscripts
 
-import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import com.jhaiian.clint.R
 import com.jhaiian.clint.browser.MainActivity
@@ -8,6 +7,7 @@ import com.jhaiian.clint.browser.delegates.addUserScripts
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import com.jhaiian.clint.ui.ClintToast
 
 private const val USER_SCRIPT_INSTALL_PROMPT_PREFIX = "https://update.greasyfork.org/scripts/"
 
@@ -54,11 +54,11 @@ private fun MainActivity.installUserScriptFromPrompt(url: String) {
             UserScriptState.bumpDataVersion(this@installUserScriptFromPrompt)
             tabManager.tabs.forEach { addUserScripts(it) }
             uiState.userScriptInstallPromptRequest = null
-            Toast.makeText(this@installUserScriptFromPrompt, getString(R.string.quiver_guard_download_success_toast, fetchedName ?: url), Toast.LENGTH_SHORT).show()
+            ClintToast.show(this@installUserScriptFromPrompt, getString(R.string.quiver_guard_download_success_toast, fetchedName ?: url))
             if (webView?.canGoBack() == true) webView.goBack()
         } catch (e: Exception) {
             uiState.userScriptInstallPromptRequest = null
-            Toast.makeText(this@installUserScriptFromPrompt, e.message ?: getString(R.string.filter_list_add_error_invalid_url), Toast.LENGTH_SHORT).show()
+            ClintToast.show(this@installUserScriptFromPrompt, e.message ?: getString(R.string.filter_list_add_error_invalid_url))
             if (webView?.canGoBack() == true) webView.goBack()
         }
     }

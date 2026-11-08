@@ -1,7 +1,6 @@
 package com.jhaiian.clint.privacy
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -15,6 +14,7 @@ import com.jhaiian.clint.ui.rememberMaxContentWidth
 import com.jhaiian.clint.ui.theme.ClintComposeTheme
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import com.jhaiian.clint.ui.ClintToast
 
 class DeleteBrowsingDataActivity : ClintActivity() {
 
@@ -74,7 +74,7 @@ class DeleteBrowsingDataActivity : ClintActivity() {
         isDeleting = true
         lifecycleScope.launch {
             BrowsingDataCleaner.delete(this@DeleteBrowsingDataActivity, range, toDelete)
-            Toast.makeText(this@DeleteBrowsingDataActivity, getString(R.string.delete_data_done), Toast.LENGTH_SHORT).show()
+            ClintToast.show(this@DeleteBrowsingDataActivity, getString(R.string.delete_data_done))
             finish()
         }
     }

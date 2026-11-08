@@ -1,11 +1,11 @@
 package com.jhaiian.clint.userscripts
 
-import android.widget.Toast
 
 import com.jhaiian.clint.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import com.jhaiian.clint.ui.ClintToast
 
 internal fun UserScriptsActivity.showAddUserScriptFromLinkDialog() {
     uiState.addLinkFetchStatus = AddUserScriptLinkFetchStatus.Idle
@@ -49,6 +49,6 @@ internal fun UserScriptsActivity.confirmAddUserScriptFromLink(url: String) {
         reload()
         uiState.addFromLinkDialogOpen = false
         uiState.addLinkFetchStatus = AddUserScriptLinkFetchStatus.Idle
-        Toast.makeText(activity, getString(R.string.quiver_guard_download_success_toast, fetched.metadataName), Toast.LENGTH_SHORT).show()
+        ClintToast.show(activity, getString(R.string.quiver_guard_download_success_toast, fetched.metadataName))
     }
 }
