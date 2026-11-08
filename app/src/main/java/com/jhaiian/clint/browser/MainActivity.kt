@@ -643,7 +643,7 @@ class MainActivity : ClintActivity(), OverlayHostActivity, SnackbarHostActivity,
             return
         }
         backPressedOnce = true
-        ClintToast.show(this, getString(R.string.exit_tap_again))
+        ClintToast.show(this, getString(R.string.exit_tap_again), topLeft = true)
         backPressHandler.postDelayed({ backPressedOnce = false }, 2000L)
     }
 

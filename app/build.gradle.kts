@@ -76,12 +76,17 @@ android {
             file("CMakeLists.txt").exists() ||
             file("src/main/jni/Android.mk").exists()
 
+    // Optional single-ABI build: ./gradlew :app:assembleGithubDebug -Pabi=arm64-v8a
+    // (skips the other per-ABI APKs and the universal APK for faster builds;
+    // unset by default so CI keeps producing all ABIs + universal).
+    val requestedAbi = (findProperty("abi") as String?)?.trim()?.takeIf { it.isNotEmpty() }
+
     splits {
         abi {
             isEnable = hasNativeLibs
             reset()
-            include("arm64-v8a", "armeabi-v7a", "x86", "x86_64")
-            isUniversalApk = true
+            include(*(requestedAbi?.let { listOf(it) } ?: listOf("arm64-v8a", "armeabi-v7a", "x86", "x86_64")).toTypedArray())
+            isUniversalApk = requestedAbi == null
         }
     }
 

@@ -42,31 +42,31 @@ object ClintToast {
     private val mainHandler = Handler(Looper.getMainLooper())
     private var currentToast: WeakReference<ToastView>? = null
 
-    fun show(context: Context, message: CharSequence, longDuration: Boolean = false) {
+    fun show(context: Context, message: CharSequence, longDuration: Boolean = false, topLeft: Boolean = false) {
         val activity = findHostActivity(context)
         if (activity == null) {
             Toast.makeText(context, message, if (longDuration) Toast.LENGTH_LONG else Toast.LENGTH_SHORT).show()
             return
         }
         if (Looper.myLooper() != Looper.getMainLooper()) {
-            mainHandler.post { show(activity, message, longDuration) }
+            mainHandler.post { show(activity, message, longDuration, topLeft) }
             return
         }
-        show(activity, message, longDuration)
+        show(activity, message, longDuration, topLeft)
     }
 
-    fun show(context: Context, @StringRes resId: Int, longDuration: Boolean = false) {
-        show(context, context.getText(resId), longDuration)
+    fun show(context: Context, @StringRes resId: Int, longDuration: Boolean = false, topLeft: Boolean = false) {
+        show(context, context.getText(resId), longDuration, topLeft)
     }
 
-    private fun show(activity: Activity, message: CharSequence, longDuration: Boolean) {
+    private fun show(activity: Activity, message: CharSequence, longDuration: Boolean, topLeft: Boolean) {
         if (activity.isFinishing || activity.isDestroyed) {
             Toast.makeText(activity, message, if (longDuration) Toast.LENGTH_LONG else Toast.LENGTH_SHORT).show()
             return
         }
         currentToast?.get()?.dismiss(animated = false)
         val durationMs = recommendedTimeout(activity, if (longDuration) LONG_DURATION_MS else SHORT_DURATION_MS)
-        val view = ToastView(activity, message, durationMs)
+        val view = ToastView(activity, message, durationMs, topLeft)
         currentToast = WeakReference(view)
         val decor = activity.window.decorView as? ViewGroup ?: return
         view.tag = TOAST_TAG
@@ -100,15 +100,16 @@ object ClintToast {
     }
 
     @android.annotation.SuppressLint("ClickableViewAccessibility")
-    private class ToastView(activity: Activity, message: CharSequence, durationMs: Long) : TextView(activity) {
+    private class ToastView(activity: Activity, message: CharSequence, durationMs: Long, topLeft: Boolean) : TextView(activity) {
 
         private val dismissRunnable = Runnable { dismiss(animated = true) }
+        private val density = resources.displayMetrics.density
+        private val slideInOffset = if (topLeft) -24f * density else 24f * density
         private var downX = 0f
         private var dragging = false
         private var dismissed = false
 
         init {
-            val density = resources.displayMetrics.density
             val colors = resolveColors(activity)
             text = message
             setTextColor(colors.popupText.toArgb())
@@ -126,19 +127,34 @@ object ClintToast {
             setPadding(padH, padV, padH, padV)
 
             val insets = WindowInsetsCompat.toWindowInsetsCompat(activity.window.decorView.rootWindowInsets)
-            val navInset = insets.getInsets(WindowInsetsCompat.Type.navigationBars()).bottom
-            val sideMarginPx = (24 * density).toInt()
-            val bottomMarginPx = navInset + (16 * density).toInt()
-            layoutParams = android.widget.FrameLayout.LayoutParams(
-                android.widget.FrameLayout.LayoutParams.WRAP_CONTENT,
-                android.widget.FrameLayout.LayoutParams.WRAP_CONTENT,
-                Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL
-            ).apply {
-                leftMargin = sideMarginPx
-                rightMargin = sideMarginPx
-                bottomMargin = bottomMarginPx
+            val lp = if (topLeft) {
+                // Small toast pinned to the top-left corner (e.g. the exit hint).
+                val statusInset = insets.getInsets(WindowInsetsCompat.Type.statusBars()).top
+                android.widget.FrameLayout.LayoutParams(
+                    android.widget.FrameLayout.LayoutParams.WRAP_CONTENT,
+                    android.widget.FrameLayout.LayoutParams.WRAP_CONTENT,
+                    Gravity.TOP or Gravity.START
+                ).apply {
+                    leftMargin = (16 * density).toInt()
+                    rightMargin = (16 * density).toInt()
+                    topMargin = statusInset + (12 * density).toInt()
+                }
+            } else {
+                val navInset = insets.getInsets(WindowInsetsCompat.Type.navigationBars()).bottom
+                val sideMarginPx = (24 * density).toInt()
+                val bottomMarginPx = navInset + (16 * density).toInt()
+                android.widget.FrameLayout.LayoutParams(
+                    android.widget.FrameLayout.LayoutParams.WRAP_CONTENT,
+                    android.widget.FrameLayout.LayoutParams.WRAP_CONTENT,
+                    Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL
+                ).apply {
+                    leftMargin = sideMarginPx
+                    rightMargin = sideMarginPx
+                    bottomMargin = bottomMarginPx
+                }
             }
-            maxWidth = resources.displayMetrics.widthPixels - 2 * sideMarginPx
+            layoutParams = lp
+            maxWidth = resources.displayMetrics.widthPixels - lp.leftMargin - lp.rightMargin
 
             setOnTouchListener { _, event ->
                 when (event.actionMasked) {
@@ -171,7 +187,7 @@ object ClintToast {
             }
 
             alpha = 0f
-            translationY = 24f * density
+            translationY = slideInOffset
             animate()
                 .alpha(1f)
                 .translationY(0f)
@@ -196,9 +212,9 @@ object ClintToast {
                 .setDuration(SWIPE_OUT_DURATION_MS)
                 .withEndAction { removeFromParent() }
             if (slideDirection != 0) {
-                animator.translationX(slideDirection * (width + 48f * resources.displayMetrics.density))
+                animator.translationX(slideDirection * (width + 48f * density))
             } else {
-                animator.translationY(24f * resources.displayMetrics.density)
+                animator.translationY(slideInOffset)
             }
             animator.start()
         }
