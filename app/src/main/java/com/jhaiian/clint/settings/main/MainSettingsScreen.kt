@@ -14,6 +14,7 @@ import androidx.compose.material.icons.filled.Tune
 import androidx.compose.material.icons.filled.Update
 import androidx.compose.material.icons.filled.VolunteerActivism
 import androidx.compose.material.icons.filled.WebAsset
+import androidx.compose.material.icons.filled.Bolt
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -49,7 +50,7 @@ import com.jhaiian.clint.settings.common.settingsSearchHighlight
 import com.jhaiian.clint.ui.theme.LocalClintColors
 
 enum class MainSettingsEntry {
-    BROWSER, LOOK_AND_FEEL, PRIVACY, SITE_SETTINGS, DOWNLOADS, DATA_SAVER, BACKUP_RESTORE, UPDATES, MISC, DEBUG, ABOUT
+    BROWSER, LOOK_AND_FEEL, SUMMARIZE, PRIVACY, SITE_SETTINGS, DOWNLOADS, DATA_SAVER, BACKUP_RESTORE, UPDATES, MISC, DEBUG, ABOUT
 }
 
 private class MainSettingsItem(
@@ -66,6 +67,7 @@ fun MainSettingsScreen(
     selectedEntry: MainSettingsEntry? = null,
     onSearchClick: () -> Unit,
     onLookAndFeelClick: () -> Unit,
+    onSummarizeClick: () -> Unit = {},
     onBrowserClick: () -> Unit,
     onPrivacyClick: () -> Unit,
     onSiteSettingsClick: () -> Unit,
@@ -99,6 +101,10 @@ fun MainSettingsScreen(
             MainSettingsItem(
                 MainSettingsEntry.LOOK_AND_FEEL, androidx.compose.material.icons.Icons.Filled.Palette,
                 stringResource(R.string.look_and_feel), stringResource(R.string.look_and_feel_summary), onLookAndFeelClick
+            ),
+            MainSettingsItem(
+                MainSettingsEntry.SUMMARIZE, androidx.compose.material.icons.Icons.Filled.Bolt,
+                stringResource(R.string.summarize_title), stringResource(R.string.summarize_settings_summary), onSummarizeClick
             )
         ),
         stringResource(R.string.settings_group_privacy) to listOf(

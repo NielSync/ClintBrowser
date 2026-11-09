@@ -1,4 +1,5 @@
 package com.jhaiian.clint.browser
+import androidx.compose.material.icons.filled.Bolt
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.LockOpen
@@ -150,7 +151,25 @@ internal fun AddressBarRow(
                 modifier = Modifier.padding(end = 8.dp).size(20.dp)
             )
         }
-        if (showHomeButton) {
+        if (activity.uiState.showSummarizeButton) {
+            // The quick-button slot holds either the summarize (flash) button or the
+            // home button; the summarize toggle takes precedence when enabled.
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier
+                    .padding(end = 6.dp)
+                    .size(40.dp)
+                    .clip(CircleShape)
+                    .clickable(onClick = { activity.openSummarizeSheet() })
+            ) {
+                Icon(
+                    imageVector = androidx.compose.material.icons.Icons.Filled.Bolt,
+                    contentDescription = stringResource(R.string.summarize_sheet_title),
+                    tint = colors.primary,
+                    modifier = Modifier.size(22.dp)
+                )
+            }
+        } else if (showHomeButton) {
             Box(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier

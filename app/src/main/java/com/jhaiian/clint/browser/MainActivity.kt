@@ -306,6 +306,7 @@ class MainActivity : ClintActivity(), OverlayHostActivity, SnackbarHostActivity,
             "quiver_guard_enabled" -> onQuiverGuardEnabled(prefs.getBoolean("quiver_guard_enabled", false))
             com.jhaiian.clint.mediacapture.MEDIA_CAPTURE_ENABLED_PREF -> updateMediaCaptureEnabledState()
             "show_home_button" -> updateHomeButtonState()
+            com.jhaiian.clint.summarize.PageSummarizer.PREF_TOOLBAR_BUTTON -> updateSummarizeButtonState()
             com.jhaiian.clint.tabs.TabGroupPrefs.PREF_SHOW_GROUP_BAR, com.jhaiian.clint.tabs.TabStripPrefs.PREF_SHOW_TAB_STRIP -> updateTabCount()
             com.jhaiian.clint.tabs.TabGroupPrefs.PREF_TAB_GROUPS_ENABLED -> applyTabGroupsSetting()
             com.jhaiian.clint.tabs.TabBarPlacement.PREF_TAB_STRIP_POSITION, com.jhaiian.clint.tabs.TabBarPlacement.PREF_TAB_GROUP_BAR_POSITION -> updateTabBarPositions()
@@ -350,6 +351,7 @@ class MainActivity : ClintActivity(), OverlayHostActivity, SnackbarHostActivity,
         attachBackgroundPlayback()
         updateMediaCaptureEnabledState()
         updateHomeButtonState()
+        updateSummarizeButtonState()
         updateTabBarPositions()
         setupTranslations()
         tabManager.framelessShortcutIds = com.jhaiian.clint.shortcuts.ShortcutStore.framelessIds(this)
@@ -906,6 +908,9 @@ class MainActivity : ClintActivity(), OverlayHostActivity, SnackbarHostActivity,
     fun onMenuFindInPage() {
         openFindBar()
     }
+    fun openSummarizeSheet() {
+        uiState.summarizeSheetOpen = true
+    }
     fun onMenuTranslate() {
         openTranslatePage()
     }
@@ -1305,6 +1310,12 @@ td,th{border:1px solid $secondaryColor;padding:6px 8px;}
                 webView.post { webView.evaluateJavascript("window.__usXhrCallback&&window.__usXhrCallback('$safeId',null,${err})", null) }
             }
         }
+    }
+
+    internal fun updateSummarizeButtonState() {
+        uiState.showSummarizeButton = prefs.getBoolean(
+            com.jhaiian.clint.summarize.PageSummarizer.PREF_TOOLBAR_BUTTON, false
+        )
     }
 
     internal fun isNetworkMetered(): Boolean {

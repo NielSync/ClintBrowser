@@ -63,6 +63,8 @@ internal class MainUiState {
     var isIncognito by mutableStateOf(false)
     var isMediaCaptureEnabled by mutableStateOf(true)
     var showHomeButton by mutableStateOf(true)
+    var showSummarizeButton by mutableStateOf(false)
+    var summarizeSheetOpen by mutableStateOf(false)
     var activeTabId by mutableStateOf<String?>(null)
 
     var topBarFraction by mutableFloatStateOf(0f)

@@ -31,6 +31,9 @@ import androidx.compose.material.icons.filled.CloudDownload
 import androidx.compose.material.icons.filled.Tab
 import androidx.compose.material.icons.filled.Workspaces
 import androidx.compose.material.icons.filled.BatterySaver
+import androidx.compose.material.icons.filled.Bolt
+import androidx.compose.material.icons.filled.Key
+import androidx.compose.material.icons.filled.SmartToy
 import androidx.compose.material.icons.filled.Block
 import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.Brush
@@ -131,6 +134,7 @@ import com.jhaiian.clint.settings.DEST_ABOUT
 import com.jhaiian.clint.settings.DEST_BACKUP_RESTORE
 import com.jhaiian.clint.settings.DEST_BROWSER
 import com.jhaiian.clint.settings.DEST_DATA_SAVER
+import com.jhaiian.clint.settings.DEST_SUMMARIZE
 import com.jhaiian.clint.settings.DEST_DEBUG
 import com.jhaiian.clint.settings.DEST_DOWNLOADS
 import com.jhaiian.clint.settings.DEST_LOOK_AND_FEEL
@@ -265,6 +269,7 @@ internal fun buildSettingsSearchEntries(context: Context): List<SettingsSearchEn
     category(DEST_SITE_SETTINGS, R.string.site_settings, R.string.site_settings_summary, Icons.Filled.WebAsset)
     category(DEST_DOWNLOADS, R.string.download_settings_title, R.string.download_settings_summary, Icons.Filled.Download)
     category(DEST_DATA_SAVER, R.string.data_saver_title, R.string.data_saver_settings_summary, Icons.Filled.DataSaverOn)
+    category(DEST_SUMMARIZE, R.string.summarize_title, R.string.summarize_settings_summary, Icons.Filled.Bolt)
     category(DEST_BACKUP_RESTORE, R.string.backup_restore_title, R.string.backup_restore_summary, Icons.Filled.SettingsBackupRestore)
     if (BuildConfig.IS_FOSS) {
         category(DEST_UPDATES, R.string.view_changelog_title, R.string.view_changelog_summary, Icons.Filled.Update)
@@ -403,6 +408,13 @@ internal fun buildSettingsSearchEntries(context: Context): List<SettingsSearchEn
         item(R.string.site_settings_desktop_mode, section = R.string.site_section_desktop_mode, icon = Icons.Filled.DesktopWindows)
         item(R.string.data_saver_title, R.string.site_settings_data_saver_summary, R.string.site_section_data_saver, icon = Icons.Filled.DataSaverOff)
         item(R.string.site_settings_quiver_guard, R.string.site_settings_quiver_guard_summary, R.string.site_section_quiver_guard, icon = Icons.Filled.Shield)
+    }
+
+    page(DEST_SUMMARIZE, R.string.summarize_title, Icons.Filled.Bolt) {
+        item(R.string.summarize_provider, R.string.summarize_settings_summary, R.string.summarize_section, icon = Icons.Filled.Bolt)
+        item(R.string.summarize_api_key, R.string.summarize_settings_summary, R.string.summarize_section, icon = Icons.Filled.Key)
+        item(R.string.summarize_model, R.string.summarize_settings_summary, R.string.summarize_section, icon = Icons.Filled.SmartToy)
+        item(R.string.summarize_show_toolbar_button, R.string.summarize_show_toolbar_button_desc, R.string.summarize_section, icon = Icons.Filled.Bolt)
     }
 
     page(DEST_DATA_SAVER, R.string.data_saver_title, Icons.Filled.DataSaverOn) {

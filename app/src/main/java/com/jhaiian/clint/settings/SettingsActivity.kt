@@ -74,6 +74,7 @@ internal const val DEST_BACKUP_RESTORE = "backup_restore"
 internal const val DEST_UPDATES = "updates"
 internal const val DEST_MISC = "misc"
 internal const val DEST_TRANSLATIONS = "translations"
+internal const val DEST_SUMMARIZE = "summarize"
 internal const val DEST_DEBUG = "debug"
 internal const val DEST_ABOUT = "about"
 internal const val DEST_SUPPORT_CLINT = "support_clint"
@@ -106,6 +107,7 @@ class SettingsActivity : ClintActivity(), OverlayHostActivity {
             "download_settings" -> DEST_DOWNLOADS
             "site_settings" -> DEST_SITE_SETTINGS
             "translations" -> DEST_TRANSLATIONS
+            "summarize" -> DEST_SUMMARIZE
             else -> null
         }
 
@@ -287,6 +289,7 @@ private fun SettingsListPane(
                     selectedEntry = selectedDestination?.let(::mainEntryFor),
                     onSearchClick = { onSearchActiveChange(true) },
                     onLookAndFeelClick = { onNavigate(DEST_LOOK_AND_FEEL, null) },
+                    onSummarizeClick = { onNavigate(DEST_SUMMARIZE, null) },
                     onBrowserClick = { onNavigate(DEST_BROWSER, null) },
                     onPrivacyClick = { onNavigate(DEST_PRIVACY, null) },
                     onSiteSettingsClick = { onNavigate(DEST_SITE_SETTINGS, null) },
@@ -331,6 +334,7 @@ private fun SettingsDetailPane(
                     DEST_UPDATES -> UpdateSettingsPane(activity)
                     DEST_MISC -> MiscPane(activity)
                     DEST_TRANSLATIONS -> com.jhaiian.clint.settings.translations.TranslationsSettingsPane(activity)
+                    DEST_SUMMARIZE -> com.jhaiian.clint.settings.summarize.SummarizePane(activity)
                     DEST_DEBUG -> DebugPane(activity)
                     DEST_ABOUT -> AboutPane(activity)
                 }
@@ -350,6 +354,7 @@ private fun mainEntryFor(destination: String): MainSettingsEntry? = when (destin
     DEST_UPDATES -> MainSettingsEntry.UPDATES
     DEST_MISC -> MainSettingsEntry.MISC
     DEST_TRANSLATIONS -> MainSettingsEntry.BROWSER
+    DEST_SUMMARIZE -> MainSettingsEntry.SUMMARIZE
     DEST_DEBUG -> MainSettingsEntry.DEBUG
     DEST_ABOUT -> MainSettingsEntry.ABOUT
     else -> null
@@ -371,6 +376,7 @@ private fun destinationTitleRes(destination: String): Int = when (destination) {
     DEST_UPDATES -> R.string.pref_updates_title
     DEST_MISC -> R.string.pref_misc_title
     DEST_TRANSLATIONS -> R.string.translation_settings_title
+    DEST_SUMMARIZE -> R.string.summarize_title
     DEST_DEBUG -> R.string.debug_title
     DEST_ABOUT -> R.string.about
     else -> R.string.settings

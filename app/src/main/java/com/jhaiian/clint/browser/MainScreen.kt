@@ -263,6 +263,9 @@ internal fun MainScreen(activity: MainActivity, state: MainUiState) {
         state.contentPreviewRequest?.let { req ->
             com.jhaiian.clint.browser.sheets.ContentPreviewSheet(request = req, activity = activity, onDismiss = { state.contentPreviewRequest = null })
         }
+        if (state.summarizeSheetOpen) {
+            com.jhaiian.clint.browser.sheets.SummarizeSheet(activity = activity, onDismiss = { state.summarizeSheetOpen = false })
+        }
 
         val hideStatusBarPref = remember { androidx.preference.PreferenceManager.getDefaultSharedPreferences(activity).getBoolean("hide_status_bar", false) }
         val hideSystemNavigationPref = remember { androidx.preference.PreferenceManager.getDefaultSharedPreferences(activity).getBoolean("hide_system_navigation", false) }
