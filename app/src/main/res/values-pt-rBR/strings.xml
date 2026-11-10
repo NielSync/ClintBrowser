@@ -529,6 +529,8 @@
     <string name="summarize_section">Resumo com IA</string>
     <string name="summarize_show_api_key">Mostrar chave de API</string>
     <string name="summarize_hide_api_key">Ocultar chave de API</string>
+    <string name="summarize_shake">Agitar para resumar</string>
+    <string name="summarize_shake_desc">Agite o dispositivo para resumir a página atual</string>
     <string name="menu_find_in_page">Localizar na página</string>
     <string name="find_in_page_hint">Localizar na página</string>
     <string name="find_previous_match">Correspondência anterior</string>

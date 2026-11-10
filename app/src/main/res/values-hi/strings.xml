@@ -529,6 +529,8 @@
     <string name="summarize_section">AI सारांश</string>
     <string name="summarize_show_api_key">API कुंजी दिखाएँ</string>
     <string name="summarize_hide_api_key">API कुंजी छिपाएँ</string>
+    <string name="summarize_shake">सारांश के लिए हिलाएँ</string>
+    <string name="summarize_shake_desc">वर्तमान पेज का सारांश बनाने के लिए डिवाइस हिलाएँ</string>
     <string name="menu_find_in_page">पेज में खोजें</string>
     <string name="find_in_page_hint">पेज में खोजें</string>
     <string name="find_previous_match">पिछला मिलान</string>

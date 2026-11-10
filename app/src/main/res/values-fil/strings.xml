@@ -528,6 +528,8 @@
     <string name="summarize_section">AI Summary</string>
     <string name="summarize_show_api_key">Ipakita ang API key</string>
     <string name="summarize_hide_api_key">Itago ang API key</string>
+    <string name="summarize_shake">Shake para i-summarize</string>
+    <string name="summarize_shake_desc">I-shake ang device para i-summarize ang kasalukuyang page</string>
     <string name="menu_find_in_page">Maghanap sa pahina</string>
     <string name="find_in_page_hint">Maghanap sa pahina</string>
     <string name="find_previous_match">Naunang tugma</string>

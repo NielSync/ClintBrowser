@@ -15,6 +15,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Bolt
+import androidx.compose.material.icons.filled.Vibration
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.RadioButton
@@ -61,6 +62,7 @@ fun SummarizePane(activity: SettingsActivity) {
     var model by remember { mutableStateOf(prefs.getString(PageSummarizer.PREF_MODEL, "") ?: "") }
     var baseUrl by remember { mutableStateOf(prefs.getString(PageSummarizer.PREF_BASE_URL, "") ?: "") }
     var toolbarButton by remember { mutableStateOf(prefs.getBoolean(PageSummarizer.PREF_TOOLBAR_BUTTON, false)) }
+    var shakeToSummarize by remember { mutableStateOf(prefs.getBoolean(PageSummarizer.PREF_SHAKE, true)) }
     var providerDialog by remember { mutableStateOf(false) }
 
     val provider = PageSummarizer.PROVIDERS.firstOrNull { it.id == providerId } ?: PageSummarizer.PROVIDERS.first()
@@ -151,6 +153,20 @@ fun SummarizePane(activity: SettingsActivity) {
                 },
                 trailing = {
                     ClintSwitch(checked = toolbarButton)
+                }
+            )
+            RowDivider(colors.divider)
+            SettingsRow(
+                icon = Icons.Filled.Vibration,
+                title = stringResource(R.string.summarize_shake),
+                summary = stringResource(R.string.summarize_shake_desc),
+                colors = colors,
+                onClick = {
+                    shakeToSummarize = !shakeToSummarize
+                    prefs.edit().putBoolean(PageSummarizer.PREF_SHAKE, shakeToSummarize).apply()
+                },
+                trailing = {
+                    ClintSwitch(checked = shakeToSummarize)
                 }
             )
         }

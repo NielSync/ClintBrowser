@@ -531,6 +531,8 @@
     <string name="summarize_section">Resumen con IA</string>
     <string name="summarize_show_api_key">Mostrar clave de API</string>
     <string name="summarize_hide_api_key">Ocultar clave de API</string>
+    <string name="summarize_shake">Agitar para resumir</string>
+    <string name="summarize_shake_desc">Agita el dispositivo para resumir la página actual</string>
     <string name="menu_find_in_page">Buscar en la página</string>
     <string name="find_in_page_hint">Buscar en la página</string>
     <string name="find_previous_match">Coincidencia anterior</string>

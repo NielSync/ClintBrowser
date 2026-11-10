@@ -130,6 +130,10 @@ class MainActivity : ClintActivity(), OverlayHostActivity, SnackbarHostActivity,
 
     internal val findHandler = Handler(Looper.getMainLooper())
 
+    private val summarizeShakeDetector = com.jhaiian.clint.summarize.ShakeDetector {
+        if (!uiState.summarizeSheetOpen) openSummarizeSheet()
+    }
+
     internal var pendingFileChooserCallback: android.webkit.ValueCallback<Array<android.net.Uri>>? = null
     internal var pendingFileChooserParams: android.webkit.WebChromeClient.FileChooserParams? = null
     internal var filePathCallback: android.webkit.ValueCallback<Array<android.net.Uri>>? = null
@@ -308,6 +312,15 @@ class MainActivity : ClintActivity(), OverlayHostActivity, SnackbarHostActivity,
             com.jhaiian.clint.mediacapture.MEDIA_CAPTURE_ENABLED_PREF -> updateMediaCaptureEnabledState()
             "show_home_button" -> updateHomeButtonState()
             com.jhaiian.clint.summarize.PageSummarizer.PREF_TOOLBAR_BUTTON -> updateSummarizeButtonState()
+            com.jhaiian.clint.summarize.PageSummarizer.PREF_SHAKE -> {
+                if (prefs.getBoolean(com.jhaiian.clint.summarize.PageSummarizer.PREF_SHAKE, true) &&
+                    lifecycle.currentState.isAtLeast(androidx.lifecycle.Lifecycle.State.RESUMED)
+                ) {
+                    summarizeShakeDetector.start(this)
+                } else {
+                    summarizeShakeDetector.stop(this)
+                }
+            }
             com.jhaiian.clint.tabs.TabGroupPrefs.PREF_SHOW_GROUP_BAR, com.jhaiian.clint.tabs.TabStripPrefs.PREF_SHOW_TAB_STRIP -> updateTabCount()
             com.jhaiian.clint.tabs.TabGroupPrefs.PREF_TAB_GROUPS_ENABLED -> applyTabGroupsSetting()
             com.jhaiian.clint.tabs.TabBarPlacement.PREF_TAB_STRIP_POSITION, com.jhaiian.clint.tabs.TabBarPlacement.PREF_TAB_GROUP_BAR_POSITION -> updateTabBarPositions()
@@ -497,6 +510,11 @@ class MainActivity : ClintActivity(), OverlayHostActivity, SnackbarHostActivity,
         hasWebBottomNav = false
         swipeRefreshView.isEnabled = true
         updateMainContentInsets()
+        if (prefs.getBoolean(com.jhaiian.clint.summarize.PageSummarizer.PREF_SHAKE, true)) {
+            summarizeShakeDetector.start(this)
+        } else {
+            summarizeShakeDetector.stop(this)
+        }
         uiState.homepageDesign = com.jhaiian.clint.browser.home.readHomepageDesign(this, prefs)
         uiState.homepageImageVersion = prefs.getLong(com.jhaiian.clint.browser.home.PREF_HOMEPAGE_IMAGE_VERSION, 0L)
         uiState.homepageShowFavorites = prefs.getBoolean(com.jhaiian.clint.browser.home.PREF_HOMEPAGE_SHOW_FAVORITES, true)
@@ -514,6 +532,11 @@ class MainActivity : ClintActivity(), OverlayHostActivity, SnackbarHostActivity,
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
         if (hasFocus) applySystemUiVisibility()
+    }
+
+    override fun onPause() {
+        summarizeShakeDetector.stop(this)
+        super.onPause()
     }
 
     override fun onStop() {

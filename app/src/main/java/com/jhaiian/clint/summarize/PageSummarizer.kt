@@ -22,6 +22,7 @@ object PageSummarizer {
     const val PREF_MODEL = "summarize_model"
     const val PREF_BASE_URL = "summarize_base_url"
     const val PREF_TOOLBAR_BUTTON = "summarize_toolbar_button"
+    const val PREF_SHAKE = "summarize_shake"
 
     const val PROVIDER_OPENAI = "openai"
     const val PROVIDER_GROQ = "groq"

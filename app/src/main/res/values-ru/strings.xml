@@ -535,6 +535,8 @@
     <string name="summarize_section">ИИ-резюме</string>
     <string name="summarize_show_api_key">Показать API-ключ</string>
     <string name="summarize_hide_api_key">Скрыть API-ключ</string>
+    <string name="summarize_shake">Встряхнуть для сводки</string>
+    <string name="summarize_shake_desc">Встряхните устройство, чтобы свести текущую страницу</string>
     <string name="menu_find_in_page">Найти на странице</string>
     <string name="find_in_page_hint">Найти на странице</string>
     <string name="find_previous_match">Предыдущее совпадение</string>
