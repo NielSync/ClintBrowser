@@ -146,7 +146,6 @@ fun ClintSnackbarHost(hostState: SnackbarHostState) {
         contentAlignment = Alignment.BottomCenter
     ) {
         SnackbarHost(hostState) { data ->
-            // Fresh swipe state per snackbar so consecutive messages don't share drag history.
             androidx.compose.runtime.key(data) {
                 val dismissState = androidx.compose.material3.rememberSwipeToDismissBoxState(
                     confirmValueChange = { value ->
