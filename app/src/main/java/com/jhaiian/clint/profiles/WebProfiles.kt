@@ -16,6 +16,7 @@ enum class ProfileDeleteResult { DELETED, IN_USE }
 object WebProfiles {
 
     const val DEFAULT_ID = "default"
+    const val INCOGNITO_ID = "incognito"
     const val PROFILE_HEADER = "X-Clint-Profile"
 
     private val tabProfiles = ConcurrentHashMap<String, String>()
@@ -36,6 +37,32 @@ object WebProfiles {
             val profile = ProfileStore.getInstance().getOrCreateProfile(profileId)
             cookieManagers[profileId] = profile.cookieManager
             WebViewCompat.setProfile(webView, profileId)
+        }
+    }
+
+    /**
+     * Binds the WebView to a dedicated incognito profile so its DOM storage and
+     * cookies live in a private data directory that is wiped when the incognito
+     * session ends. Returns false when MULTI_PROFILE is unavailable, in which
+     * case the caller must keep storage disabled (the fallback profile is shared
+     * with normal tabs and would persist data on disk).
+     */
+    fun bindIncognito(webView: WebView): Boolean {
+        if (!isSupported()) return false
+        return runCatching {
+            val profile = ProfileStore.getInstance().getOrCreateProfile(INCOGNITO_ID)
+            profile.cookieManager.setAcceptCookie(false)
+            cookieManagers[INCOGNITO_ID] = profile.cookieManager
+            WebViewCompat.setProfile(webView, INCOGNITO_ID)
+            true
+        }.getOrDefault(false)
+    }
+
+    /** Wipes the incognito profile (storage + cookies) once its WebViews are gone. */
+    fun wipeIncognitoData() {
+        if (deleteProfileData(INCOGNITO_ID) == ProfileDeleteResult.IN_USE) {
+            android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(
+                { runCatching { deleteProfileData(INCOGNITO_ID) } }, 1000L)
         }
     }
 

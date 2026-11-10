@@ -37,7 +37,11 @@ internal fun MainActivity.createWebView(isIncognito: Boolean, profileId: String 
     if (!isIncognito) WebProfiles.bind(webView, profileId)
     val settings = webView.settings
     settings.javaScriptEnabled = prefs.getBoolean("javascript_enabled", true)
-    settings.domStorageEnabled = !isIncognito
+    // Incognito: real DOM storage, isolated in a dedicated profile that is wiped when
+    // the session ends (Chrome/Firefox private-mode behavior). If the profile binding
+    // is unavailable, storage stays disabled - the fallback profile is shared with
+    // normal tabs and would persist data on disk.
+    settings.domStorageEnabled = if (!isIncognito) true else WebProfiles.bindIncognito(webView)
     settings.cacheMode = if (isIncognito) WebSettings.LOAD_NO_CACHE else WebSettings.LOAD_DEFAULT
     settings.setSupportZoom(true)
     settings.setSupportMultipleWindows(true)
