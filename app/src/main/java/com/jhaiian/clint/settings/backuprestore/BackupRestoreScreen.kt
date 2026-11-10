@@ -49,8 +49,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.preference.PreferenceManager
 import com.jhaiian.clint.R
-import com.jhaiian.clint.backup.AuthGateResult
-import com.jhaiian.clint.backup.BackupAuthGate
 import com.jhaiian.clint.backup.BackupCategory
 import com.jhaiian.clint.backup.BackupManager
 import com.jhaiian.clint.backup.RestoreManager
@@ -149,10 +147,6 @@ fun BackupRestorePane(activity: SettingsActivity) {
 
     val okLabel = stringResource(R.string.backup_generic_ok)
     val cancelLabel = stringResource(R.string.action_cancel)
-    val authTitle = stringResource(R.string.backup_auth_title)
-    val authSubtitleRestore = stringResource(R.string.backup_auth_subtitle_restore)
-    val authUnavailableTitle = stringResource(R.string.backup_auth_unavailable_title)
-    val authUnavailableMessage = stringResource(R.string.backup_auth_unavailable_message)
     val backupResultSuccessTitle = stringResource(R.string.backup_result_success_title)
     val backupResultSuccessMessage = stringResource(R.string.backup_result_success_message)
     val backupResultSkippedNote = stringResource(R.string.backup_result_skipped_note)
@@ -176,30 +170,6 @@ fun BackupRestorePane(activity: SettingsActivity) {
     val backupPasswordTooShort = stringResource(R.string.backup_password_too_short)
     val backupPasswordMismatch = stringResource(R.string.backup_password_mismatch)
     val restorePasswordWrong = stringResource(R.string.restore_password_wrong)
-
-    fun requireAuthThen(subtitle: String, onSuccess: () -> Unit) {
-        if (!BackupAuthGate.isAuthenticationAvailable(activity)) {
-            simpleDialog = ConfirmDialogConfig(
-                title = authUnavailableTitle,
-                message = authUnavailableMessage,
-                positiveLabel = okLabel
-            )
-            return
-        }
-        scope.launch {
-            when (BackupAuthGate.authenticate(activity, authTitle, subtitle)) {
-                is AuthGateResult.Success -> onSuccess()
-                is AuthGateResult.NotAvailable -> {
-                    simpleDialog = ConfirmDialogConfig(
-                        title = authUnavailableTitle,
-                        message = authUnavailableMessage,
-                        positiveLabel = okLabel
-                    )
-                }
-                else -> Unit
-            }
-        }
-    }
 
     fun performRestoreNow() {
         val zipFile = uiState.plainZipFile.value ?: return
@@ -348,9 +318,10 @@ fun BackupRestorePane(activity: SettingsActivity) {
     }
 
     fun startRestoreFlow() {
-        requireAuthThen(authSubtitleRestore) {
-            openDocumentLauncher.launch(arrayOf("*/*"))
-        }
+        // Restoring no longer requires lock-screen authentication, mirroring backup
+        // creation: unencrypted backups must be importable on devices without a secure
+        // lock screen, and encrypted backups are protected by their own password.
+        openDocumentLauncher.launch(arrayOf("*/*"))
     }
 
     fun launchBackupCreation() {
