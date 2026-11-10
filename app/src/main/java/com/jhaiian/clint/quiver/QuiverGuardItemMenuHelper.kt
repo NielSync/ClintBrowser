@@ -4,24 +4,24 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Intent
 import android.os.Build
+import android.widget.Toast
 import com.jhaiian.clint.R
 import com.jhaiian.clint.ui.listscreen.ConfirmDialogConfig
-import com.jhaiian.clint.ui.ClintToast
 
 private fun QuiverGuardActivity.selectedFilterLists(): List<FilterList> =
     uiState.filterLists.filter { it.id in uiState.selectedIds }
 
 internal fun QuiverGuardActivity.confirmCheckUpdateForItem(filterList: FilterList) {
     if (uiState.isUpdateRunning || uiState.isCompileRunning || isDownloadInProgress(filterList.id)) {
-        ClintToast.show(this, getString(R.string.filter_list_operation_in_progress))
+        Toast.makeText(this, getString(R.string.filter_list_operation_in_progress), Toast.LENGTH_SHORT).show()
         return
     }
     if (filterList.isLocal) {
-        ClintToast.show(this, getString(R.string.filter_list_item_local_no_update))
+        Toast.makeText(this, getString(R.string.filter_list_item_local_no_update), Toast.LENGTH_SHORT).show()
         return
     }
     if (!filterList.isDownloaded) {
-        ClintToast.show(this, getString(R.string.filter_list_item_not_downloaded, filterList.name))
+        Toast.makeText(this, getString(R.string.filter_list_item_not_downloaded, filterList.name), Toast.LENGTH_SHORT).show()
         return
     }
     uiState.confirmDialog = ConfirmDialogConfig(
@@ -41,15 +41,15 @@ internal fun QuiverGuardActivity.confirmCheckUpdateForItem(filterList: FilterLis
 
 internal fun QuiverGuardActivity.confirmForceUpdateForItem(filterList: FilterList) {
     if (uiState.isUpdateRunning || uiState.isCompileRunning || isDownloadInProgress(filterList.id)) {
-        ClintToast.show(this, getString(R.string.filter_list_operation_in_progress))
+        Toast.makeText(this, getString(R.string.filter_list_operation_in_progress), Toast.LENGTH_SHORT).show()
         return
     }
     if (filterList.isLocal) {
-        ClintToast.show(this, getString(R.string.filter_list_item_local_no_update))
+        Toast.makeText(this, getString(R.string.filter_list_item_local_no_update), Toast.LENGTH_SHORT).show()
         return
     }
     if (!filterList.isDownloaded) {
-        ClintToast.show(this, getString(R.string.filter_list_item_not_downloaded, filterList.name))
+        Toast.makeText(this, getString(R.string.filter_list_item_not_downloaded, filterList.name), Toast.LENGTH_SHORT).show()
         return
     }
     uiState.confirmDialog = ConfirmDialogConfig(
@@ -69,7 +69,7 @@ internal fun QuiverGuardActivity.confirmForceUpdateForItem(filterList: FilterLis
 
 internal fun QuiverGuardActivity.confirmRemoveFilterListItem(filterList: FilterList) {
     if (uiState.isUpdateRunning || uiState.isCompileRunning || isDownloadInProgress(filterList.id)) {
-        ClintToast.show(this, getString(R.string.filter_list_operation_in_progress))
+        Toast.makeText(this, getString(R.string.filter_list_operation_in_progress), Toast.LENGTH_SHORT).show()
         return
     }
     uiState.confirmDialog = ConfirmDialogConfig(
@@ -85,7 +85,7 @@ internal fun QuiverGuardActivity.copyFilterListName(filterList: FilterList) {
     val clipboard = getSystemService(ClipboardManager::class.java)
     clipboard.setPrimaryClip(ClipData.newPlainText(getString(R.string.filter_list_name_clip_label), filterList.name))
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
-        ClintToast.show(this, getString(R.string.filter_list_item_name_copied))
+        Toast.makeText(this, getString(R.string.filter_list_item_name_copied), Toast.LENGTH_SHORT).show()
     }
 }
 
@@ -93,7 +93,7 @@ internal fun QuiverGuardActivity.copyFilterListDownloadLink(filterList: FilterLi
     val clipboard = getSystemService(ClipboardManager::class.java)
     clipboard.setPrimaryClip(ClipData.newPlainText(getString(R.string.filter_list_link_clip_label), filterList.downloadUrl))
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
-        ClintToast.show(this, getString(R.string.filter_list_item_link_copied))
+        Toast.makeText(this, getString(R.string.filter_list_item_link_copied), Toast.LENGTH_SHORT).show()
     }
 }
 
@@ -113,7 +113,7 @@ internal fun QuiverGuardActivity.confirmCheckUpdateForSelection() {
     val selection = selectedFilterLists()
     if (selection.isEmpty()) return
     if (uiState.isUpdateRunning || uiState.isCompileRunning || selection.any { isDownloadInProgress(it.id) }) {
-        ClintToast.show(this, getString(R.string.filter_list_operation_in_progress))
+        Toast.makeText(this, getString(R.string.filter_list_operation_in_progress), Toast.LENGTH_SHORT).show()
         return
     }
     val downloaded = selection.filter { it.isDownloaded && !it.isLocal }
@@ -138,7 +138,7 @@ internal fun QuiverGuardActivity.confirmForceUpdateForSelection() {
     val selection = selectedFilterLists()
     if (selection.isEmpty()) return
     if (uiState.isUpdateRunning || uiState.isCompileRunning || selection.any { isDownloadInProgress(it.id) }) {
-        ClintToast.show(this, getString(R.string.filter_list_operation_in_progress))
+        Toast.makeText(this, getString(R.string.filter_list_operation_in_progress), Toast.LENGTH_SHORT).show()
         return
     }
     val downloaded = selection.filter { it.isDownloaded && !it.isLocal }
@@ -165,7 +165,7 @@ internal fun QuiverGuardActivity.copySelectedFilterListNames() {
     val clipboard = getSystemService(ClipboardManager::class.java)
     clipboard.setPrimaryClip(ClipData.newPlainText(getString(R.string.filter_list_name_clip_label), selection.joinToString("\n") { it.name }))
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
-        ClintToast.show(this, getString(R.string.filter_list_selection_names_copied))
+        Toast.makeText(this, getString(R.string.filter_list_selection_names_copied), Toast.LENGTH_SHORT).show()
     }
 }
 
@@ -176,7 +176,7 @@ internal fun QuiverGuardActivity.copySelectedFilterListDownloadLinks() {
     val combined = selection.filterNot { it.isLocal }.joinToString("\n") { it.downloadUrl }
     clipboard.setPrimaryClip(ClipData.newPlainText(getString(R.string.filter_list_link_clip_label), combined))
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
-        ClintToast.show(this, getString(R.string.filter_list_selection_links_copied))
+        Toast.makeText(this, getString(R.string.filter_list_selection_links_copied), Toast.LENGTH_SHORT).show()
     }
 }
 

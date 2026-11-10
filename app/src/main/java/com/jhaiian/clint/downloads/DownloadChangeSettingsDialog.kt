@@ -1,6 +1,7 @@
 package com.jhaiian.clint.downloads
 import androidx.compose.material.icons.filled.ArrowDownward
 
+import android.widget.Toast
 
 import com.jhaiian.clint.R
 
@@ -37,7 +38,6 @@ import com.jhaiian.clint.ui.ClintOutlinedTextField
 import com.jhaiian.clint.ui.ClintSwitch
 import com.jhaiian.clint.ui.listscreen.PopupShape
 import com.jhaiian.clint.ui.theme.LocalClintColors
-import com.jhaiian.clint.ui.ClintToast
 
 @Composable
 fun DownloadChangeSettingsDialog(item: DownloadItem, hideStatusBar: Boolean, hideSystemNavigation: Boolean, onDismiss: () -> Unit) {
@@ -71,7 +71,7 @@ fun DownloadChangeSettingsDialog(item: DownloadItem, hideStatusBar: Boolean, hid
                         unmeteredOnly = unmeteredOnly,
                         speedLimitBytesPerSec = bytesPerSec
                     )
-                    ClintToast.show(context, context.getString(R.string.download_change_settings_saved))
+                    Toast.makeText(context, context.getString(R.string.download_change_settings_saved), Toast.LENGTH_SHORT).show()
                     onDismiss()
                 }
             )

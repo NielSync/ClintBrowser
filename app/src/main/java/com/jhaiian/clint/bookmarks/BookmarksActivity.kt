@@ -5,6 +5,7 @@ import com.jhaiian.clint.R
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.activity.compose.setContent
 import androidx.core.view.WindowCompat
@@ -18,7 +19,6 @@ import com.jhaiian.clint.ui.theme.ClintComposeTheme
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import com.jhaiian.clint.ui.ClintToast
 
 class BookmarksActivity : ClintActivity() {
 
@@ -158,7 +158,7 @@ class BookmarksActivity : ClintActivity() {
             val openFolderId = uiState.currentFolderId
             if (openFolderId != null && openFolderId in removedFolderIds) uiState.currentFolderId = null
             uiState.exitSelectionMode()
-            ClintToast.show(this@BookmarksActivity, getString(R.string.bookmarks_items_deleted))
+            Toast.makeText(this@BookmarksActivity, getString(R.string.bookmarks_items_deleted), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -211,9 +211,9 @@ class BookmarksActivity : ClintActivity() {
     private fun handleImportResult(result: Result<Int>) {
         result.onSuccess { count ->
             loadBookmarks()
-            ClintToast.show(this, getString(R.string.bookmarks_import_success, count))
+            Toast.makeText(this, getString(R.string.bookmarks_import_success, count), Toast.LENGTH_SHORT).show()
         }.onFailure {
-            ClintToast.show(this, getString(R.string.bookmarks_import_error))
+            Toast.makeText(this, getString(R.string.bookmarks_import_error), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -247,9 +247,9 @@ class BookmarksActivity : ClintActivity() {
 
     private fun handleExportResult(result: Result<Unit>) {
         result.onSuccess {
-            ClintToast.show(this, getString(R.string.bookmarks_export_success))
+            Toast.makeText(this, getString(R.string.bookmarks_export_success), Toast.LENGTH_SHORT).show()
         }.onFailure {
-            ClintToast.show(this, getString(R.string.bookmarks_export_error))
+            Toast.makeText(this, getString(R.string.bookmarks_export_error), Toast.LENGTH_SHORT).show()
         }
     }
 }

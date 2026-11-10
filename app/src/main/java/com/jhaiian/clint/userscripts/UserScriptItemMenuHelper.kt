@@ -4,9 +4,9 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Intent
 import android.os.Build
+import android.widget.Toast
 import com.jhaiian.clint.R
 import com.jhaiian.clint.ui.listscreen.ConfirmDialogConfig
-import com.jhaiian.clint.ui.ClintToast
 
 private fun UserScriptsActivity.selectedUserScripts(): List<UserScript> =
     uiState.scripts.filter { it.id in uiState.selectedIds }
@@ -16,11 +16,11 @@ private fun UserScriptsActivity.scriptDisplayName(script: UserScript): String =
 
 internal fun UserScriptsActivity.confirmCheckUpdateForItem(script: UserScript) {
     if (uiState.isUpdateRunning) {
-        ClintToast.show(this, getString(R.string.filter_list_operation_in_progress))
+        Toast.makeText(this, getString(R.string.filter_list_operation_in_progress), Toast.LENGTH_SHORT).show()
         return
     }
     if (script.isLocal) {
-        ClintToast.show(this, getString(R.string.user_scripts_item_local_no_update))
+        Toast.makeText(this, getString(R.string.user_scripts_item_local_no_update), Toast.LENGTH_SHORT).show()
         return
     }
     val name = scriptDisplayName(script)
@@ -41,11 +41,11 @@ internal fun UserScriptsActivity.confirmCheckUpdateForItem(script: UserScript) {
 
 internal fun UserScriptsActivity.confirmForceUpdateForItem(script: UserScript) {
     if (uiState.isUpdateRunning) {
-        ClintToast.show(this, getString(R.string.filter_list_operation_in_progress))
+        Toast.makeText(this, getString(R.string.filter_list_operation_in_progress), Toast.LENGTH_SHORT).show()
         return
     }
     if (script.isLocal) {
-        ClintToast.show(this, getString(R.string.user_scripts_item_local_no_update))
+        Toast.makeText(this, getString(R.string.user_scripts_item_local_no_update), Toast.LENGTH_SHORT).show()
         return
     }
     val name = scriptDisplayName(script)
@@ -66,7 +66,7 @@ internal fun UserScriptsActivity.confirmForceUpdateForItem(script: UserScript) {
 
 internal fun UserScriptsActivity.confirmRemoveUserScriptItem(script: UserScript) {
     if (uiState.isUpdateRunning) {
-        ClintToast.show(this, getString(R.string.filter_list_operation_in_progress))
+        Toast.makeText(this, getString(R.string.filter_list_operation_in_progress), Toast.LENGTH_SHORT).show()
         return
     }
     uiState.confirmDialog = ConfirmDialogConfig(
@@ -87,7 +87,7 @@ internal fun UserScriptsActivity.copyUserScriptName(script: UserScript) {
     val clipboard = getSystemService(ClipboardManager::class.java)
     clipboard.setPrimaryClip(ClipData.newPlainText(getString(R.string.user_scripts_name_clip_label), name))
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
-        ClintToast.show(this, getString(R.string.filter_list_item_name_copied))
+        Toast.makeText(this, getString(R.string.filter_list_item_name_copied), Toast.LENGTH_SHORT).show()
     }
 }
 
@@ -96,7 +96,7 @@ internal fun UserScriptsActivity.copyUserScriptSourceLink(script: UserScript) {
     val clipboard = getSystemService(ClipboardManager::class.java)
     clipboard.setPrimaryClip(ClipData.newPlainText(getString(R.string.user_scripts_link_clip_label), link))
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
-        ClintToast.show(this, getString(R.string.filter_list_item_link_copied))
+        Toast.makeText(this, getString(R.string.filter_list_item_link_copied), Toast.LENGTH_SHORT).show()
     }
 }
 
@@ -117,7 +117,7 @@ internal fun UserScriptsActivity.confirmCheckUpdateForSelection() {
     val selection = selectedUserScripts()
     if (selection.isEmpty()) return
     if (uiState.isUpdateRunning) {
-        ClintToast.show(this, getString(R.string.filter_list_operation_in_progress))
+        Toast.makeText(this, getString(R.string.filter_list_operation_in_progress), Toast.LENGTH_SHORT).show()
         return
     }
     val updatable = selection.filter { !it.isLocal }
@@ -142,7 +142,7 @@ internal fun UserScriptsActivity.confirmForceUpdateForSelection() {
     val selection = selectedUserScripts()
     if (selection.isEmpty()) return
     if (uiState.isUpdateRunning) {
-        ClintToast.show(this, getString(R.string.filter_list_operation_in_progress))
+        Toast.makeText(this, getString(R.string.filter_list_operation_in_progress), Toast.LENGTH_SHORT).show()
         return
     }
     val updatable = selection.filter { !it.isLocal }
@@ -169,7 +169,7 @@ internal fun UserScriptsActivity.copySelectedUserScriptNames() {
     val clipboard = getSystemService(ClipboardManager::class.java)
     clipboard.setPrimaryClip(ClipData.newPlainText(getString(R.string.user_scripts_name_clip_label), selection.joinToString("\n") { scriptDisplayName(it) }))
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
-        ClintToast.show(this, getString(R.string.filter_list_selection_names_copied))
+        Toast.makeText(this, getString(R.string.filter_list_selection_names_copied), Toast.LENGTH_SHORT).show()
     }
 }
 
@@ -180,7 +180,7 @@ internal fun UserScriptsActivity.copySelectedUserScriptSourceLinks() {
     val combined = selection.mapNotNull { it.sourceUrl?.takeIf { url -> url.isNotBlank() } }.joinToString("\n")
     clipboard.setPrimaryClip(ClipData.newPlainText(getString(R.string.user_scripts_link_clip_label), combined))
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
-        ClintToast.show(this, getString(R.string.filter_list_selection_links_copied))
+        Toast.makeText(this, getString(R.string.filter_list_selection_links_copied), Toast.LENGTH_SHORT).show()
     }
 }
 

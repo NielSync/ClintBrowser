@@ -1,6 +1,7 @@
 package com.jhaiian.clint.settings.quiverguardexception
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
 import androidx.compose.ui.res.stringResource
@@ -18,7 +19,6 @@ import com.jhaiian.clint.settings.site.SiteListScreen
 import com.jhaiian.clint.settings.site.SiteListUiState
 import com.jhaiian.clint.ui.theme.ClintComposeTheme
 import com.jhaiian.clint.ui.theme.LocalClintColors
-import com.jhaiian.clint.ui.ClintToast
 
 class QuiverGuardExceptionActivity : ClintActivity() {
 
@@ -78,7 +78,7 @@ class QuiverGuardExceptionActivity : ClintActivity() {
                                 listState.selectedOrigins.forEach { origin -> SitePermissionManager.deleteEntry(this@QuiverGuardExceptionActivity, origin, type) }
                                 listState.removeSelectedItems()
                                 listState.deleteConfirmOpen = false
-                                ClintToast.show(this@QuiverGuardExceptionActivity, getString(R.string.quiver_guard_exception_items_deleted))
+                                Toast.makeText(this@QuiverGuardExceptionActivity, getString(R.string.quiver_guard_exception_items_deleted), Toast.LENGTH_SHORT).show()
                             },
                             onDismiss = { listState.deleteConfirmOpen = false }
                         )

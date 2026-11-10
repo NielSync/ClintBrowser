@@ -1,6 +1,7 @@
 package com.jhaiian.clint.settings.datasaver
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
 import androidx.compose.ui.res.stringResource
@@ -18,7 +19,6 @@ import com.jhaiian.clint.settings.sitepermissions.SitePermissionManager
 import com.jhaiian.clint.ui.rememberMaxContentWidth
 import com.jhaiian.clint.ui.theme.ClintComposeTheme
 import com.jhaiian.clint.ui.theme.LocalClintColors
-import com.jhaiian.clint.ui.ClintToast
 
 class DataSaverExceptionActivity : ClintActivity() {
 
@@ -78,7 +78,7 @@ class DataSaverExceptionActivity : ClintActivity() {
                                 listState.selectedOrigins.forEach { origin -> DataSaverSiteException.remove(this@DataSaverExceptionActivity, origin) }
                                 listState.removeSelectedItems()
                                 listState.deleteConfirmOpen = false
-                                ClintToast.show(this@DataSaverExceptionActivity, getString(R.string.data_saver_exception_items_deleted))
+                                Toast.makeText(this@DataSaverExceptionActivity, getString(R.string.data_saver_exception_items_deleted), Toast.LENGTH_SHORT).show()
                             },
                             onDismiss = { listState.deleteConfirmOpen = false }
                         )

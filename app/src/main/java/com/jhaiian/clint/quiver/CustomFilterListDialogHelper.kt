@@ -1,9 +1,9 @@
 package com.jhaiian.clint.quiver
 
+import android.widget.Toast
 
 import com.jhaiian.clint.R
 import kotlinx.coroutines.launch
-import com.jhaiian.clint.ui.ClintToast
 
 internal fun QuiverGuardActivity.showAddFilterListDialog() {
     uiState.addLinkFetchStatus = AddLinkFetchStatus.Idle
@@ -46,5 +46,5 @@ internal fun QuiverGuardActivity.confirmAddFilterListFromLink(url: String, title
     onFilterListAdded(FilterList(id = id, name = title, downloadUrl = url, isEnabled = true, localPath = destFile.absolutePath, fileSizeBytes = fetched.sizeBytes, downloadedAt = System.currentTimeMillis(), ruleCount = fetched.ruleCount, isCustom = true))
     uiState.addFromLinkDialogOpen = false
     uiState.addLinkFetchStatus = AddLinkFetchStatus.Idle
-    ClintToast.show(this, getString(R.string.quiver_guard_download_success_toast, title))
+    Toast.makeText(this, getString(R.string.quiver_guard_download_success_toast, title), Toast.LENGTH_SHORT).show()
 }

@@ -9,13 +9,13 @@ import android.content.Intent
 import android.webkit.CookieManager
 import android.webkit.MimeTypeMap
 import android.webkit.WebView
+import android.widget.Toast
 import androidx.core.content.FileProvider
 import com.jhaiian.clint.R
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.io.File
 import java.util.concurrent.TimeUnit
-import com.jhaiian.clint.ui.ClintToast
 
 private fun dataUriBytes(dataUri: String): ByteArray? {
     val commaIdx = dataUri.indexOf(",")
@@ -83,7 +83,7 @@ internal fun MainActivity.handleImageDownload(imageUrl: String, altText: String)
             }
             runOnUiThread {
                 if (blob == null) {
-                    ClintToast.show(appContext, R.string.download_response_failed)
+                    Toast.makeText(appContext, R.string.download_response_failed, Toast.LENGTH_SHORT).show()
                 } else if (isFinishing || isDestroyed) {
                     com.jhaiian.clint.downloads.ClintDownloadManager.enqueueBlob(appContext, blob, filename, mimeType)
                 } else {
@@ -157,7 +157,7 @@ internal fun MainActivity.handleImageCopy(imageUrl: String) {
     if (imageUrl.startsWith("data:")) {
         Thread {
             val bytes = dataUriBytes(imageUrl) ?: run {
-                runOnUiThread { ClintToast.show(this, getString(R.string.image_copy_failed)) }
+                runOnUiThread { Toast.makeText(this, getString(R.string.image_copy_failed), Toast.LENGTH_SHORT).show() }
                 return@Thread
             }
             val mimeType = dataUriMimeType(imageUrl)
@@ -172,11 +172,11 @@ internal fun MainActivity.handleImageCopy(imageUrl: String) {
                     val clip = ClipData.newUri(contentResolver, getString(R.string.image_copy), uri)
                     clipboard.setPrimaryClip(clip)
                     if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.TIRAMISU) {
-                        ClintToast.show(this, getString(R.string.image_copied))
+                        Toast.makeText(this, getString(R.string.image_copied), Toast.LENGTH_SHORT).show()
                     }
                 }
             } catch (_: Exception) {
-                runOnUiThread { ClintToast.show(this, getString(R.string.image_copy_failed)) }
+                runOnUiThread { Toast.makeText(this, getString(R.string.image_copy_failed), Toast.LENGTH_SHORT).show() }
             }
         }.start()
         return
@@ -209,11 +209,11 @@ internal fun MainActivity.handleImageCopy(imageUrl: String) {
                 val clip = ClipData.newUri(contentResolver, getString(R.string.image_copy), uri)
                 clipboard.setPrimaryClip(clip)
                 if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.TIRAMISU) {
-                    ClintToast.show(this, getString(R.string.image_copied))
+                    Toast.makeText(this, getString(R.string.image_copied), Toast.LENGTH_SHORT).show()
                 }
             }
         } catch (_: Exception) {
-            runOnUiThread { ClintToast.show(this, getString(R.string.image_copy_failed)) }
+            runOnUiThread { Toast.makeText(this, getString(R.string.image_copy_failed), Toast.LENGTH_SHORT).show() }
         }
     }.start()
 }

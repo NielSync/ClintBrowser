@@ -1,6 +1,7 @@
 package com.jhaiian.clint.settings.sitepermissions
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -33,7 +34,6 @@ import com.jhaiian.clint.settings.site.SiteListScreen
 import com.jhaiian.clint.settings.site.SiteListUiState
 import com.jhaiian.clint.ui.theme.ClintComposeTheme
 import com.jhaiian.clint.ui.theme.LocalClintColors
-import com.jhaiian.clint.ui.ClintToast
 
 class SitePermissionActivity : ClintActivity() {
 
@@ -181,7 +181,7 @@ class SitePermissionActivity : ClintActivity() {
                                 listState.selectedOrigins.forEach { origin -> SitePermissionManager.deleteEntry(this@SitePermissionActivity, origin, type) }
                                 listState.removeSelectedItems()
                                 listState.deleteConfirmOpen = false
-                                ClintToast.show(this@SitePermissionActivity, getString(R.string.site_permission_items_deleted))
+                                Toast.makeText(this@SitePermissionActivity, getString(R.string.site_permission_items_deleted), Toast.LENGTH_SHORT).show()
                             },
                             onDismiss = { listState.deleteConfirmOpen = false }
                         )

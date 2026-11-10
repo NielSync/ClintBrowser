@@ -1,12 +1,12 @@
 package com.jhaiian.clint.blocker
 
+import android.widget.Toast
 import com.jhaiian.clint.R
 import com.jhaiian.clint.ui.listscreen.ConfirmDialogConfig
-import com.jhaiian.clint.ui.ClintToast
 
 internal fun WebsiteBlockerActivity.confirmCheckUpdateAllCategories() {
     if (uiState.isDownloadRunning || uiState.isCompileRunning) {
-        ClintToast.show(this, getString(R.string.filter_list_operation_in_progress))
+        Toast.makeText(this, getString(R.string.filter_list_operation_in_progress), Toast.LENGTH_SHORT).show()
         return
     }
     val downloaded = uiState.categories.filter { it.isDownloaded }
@@ -29,7 +29,7 @@ internal fun WebsiteBlockerActivity.confirmCheckUpdateAllCategories() {
 
 internal fun WebsiteBlockerActivity.confirmForceUpdateAllCategories() {
     if (uiState.isDownloadRunning || uiState.isCompileRunning) {
-        ClintToast.show(this, getString(R.string.filter_list_operation_in_progress))
+        Toast.makeText(this, getString(R.string.filter_list_operation_in_progress), Toast.LENGTH_SHORT).show()
         return
     }
     val downloaded = uiState.categories.filter { it.isDownloaded }
@@ -52,7 +52,7 @@ internal fun WebsiteBlockerActivity.confirmForceUpdateAllCategories() {
 
 internal fun WebsiteBlockerActivity.confirmCheckUpdateActive() {
     if (uiState.isDownloadRunning || uiState.isCompileRunning) {
-        ClintToast.show(this, getString(R.string.filter_list_operation_in_progress))
+        Toast.makeText(this, getString(R.string.filter_list_operation_in_progress), Toast.LENGTH_SHORT).show()
         return
     }
     val active = uiState.categories.filter { it.isEnabled && it.isDownloaded }
@@ -75,7 +75,7 @@ internal fun WebsiteBlockerActivity.confirmCheckUpdateActive() {
 
 internal fun WebsiteBlockerActivity.confirmForceUpdateActive() {
     if (uiState.isDownloadRunning || uiState.isCompileRunning) {
-        ClintToast.show(this, getString(R.string.filter_list_operation_in_progress))
+        Toast.makeText(this, getString(R.string.filter_list_operation_in_progress), Toast.LENGTH_SHORT).show()
         return
     }
     val active = uiState.categories.filter { it.isEnabled && it.isDownloaded }
@@ -99,7 +99,7 @@ internal fun WebsiteBlockerActivity.confirmForceUpdateActive() {
 internal fun WebsiteBlockerActivity.confirmRecompile() {
     if (uiState.isCompileRunning) return
     if (uiState.isDownloadRunning) {
-        ClintToast.show(this, getString(R.string.filter_list_operation_in_progress))
+        Toast.makeText(this, getString(R.string.filter_list_operation_in_progress), Toast.LENGTH_SHORT).show()
         return
     }
     uiState.confirmDialog = ConfirmDialogConfig(

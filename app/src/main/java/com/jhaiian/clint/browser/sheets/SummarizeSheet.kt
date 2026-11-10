@@ -169,7 +169,7 @@ internal fun SummarizeSheet(activity: MainActivity, onDismiss: () -> Unit) {
                         }
                         TextButton(onClick = {
                             clipboard.setText(AnnotatedString(current.text))
-                            com.jhaiian.clint.ui.ClintToast.show(activity, activity.getString(R.string.summarize_copied))
+                            android.widget.Toast.makeText(activity, R.string.summarize_copied, android.widget.Toast.LENGTH_SHORT).show()
                         }) {
                             Text(stringResource(R.string.summarize_copy), color = colors.primary, fontWeight = FontWeight.Medium)
                         }
