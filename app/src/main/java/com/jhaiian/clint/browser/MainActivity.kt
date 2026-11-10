@@ -20,6 +20,7 @@ import android.view.View
 import android.view.ViewConfiguration
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
@@ -48,7 +49,6 @@ import com.jhaiian.clint.update.UpdateChecker
 import androidx.webkit.ScriptHandler
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
-import com.jhaiian.clint.ui.ClintToast
 
 class MainActivity : ClintActivity(), OverlayHostActivity, SnackbarHostActivity, ConfirmDialogHostActivity {
 
@@ -669,7 +669,7 @@ class MainActivity : ClintActivity(), OverlayHostActivity, SnackbarHostActivity,
             return
         }
         backPressedOnce = true
-        ClintToast.show(this, getString(R.string.exit_tap_again))
+        Toast.makeText(this, getString(R.string.exit_tap_again), Toast.LENGTH_SHORT).show()
         backPressHandler.postDelayed({ backPressedOnce = false }, 2000L)
     }
 
