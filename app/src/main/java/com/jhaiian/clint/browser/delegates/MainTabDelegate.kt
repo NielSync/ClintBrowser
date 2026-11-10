@@ -43,6 +43,7 @@ internal fun MainActivity.closeAllIncognitoTabs() {
         if (index >= 0) onTabClosed(index)
     }
     if (tabManager.activeTab?.isIncognito != false) switchToTabMode(false)
+    com.jhaiian.clint.profiles.WebProfiles.wipeIncognitoData()
     onTabGroupsChanged()
     recordBrowsingMode()
     if (!lifecycle.currentState.isAtLeast(androidx.lifecycle.Lifecycle.State.STARTED)) {

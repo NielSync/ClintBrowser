@@ -445,6 +445,9 @@ class MainActivity : ClintActivity(), OverlayHostActivity, SnackbarHostActivity,
                 }
             }
         }
+        if (tabManager.tabs.none { it.isIncognito }) {
+            com.jhaiian.clint.profiles.WebProfiles.wipeIncognitoData()
+        }
         setupBackPressedDispatcher()
     }
 
