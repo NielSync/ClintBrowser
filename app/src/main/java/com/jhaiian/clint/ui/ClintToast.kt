@@ -70,10 +70,7 @@ object ClintToast {
         currentToast = WeakReference(view)
         val decor = activity.window.decorView as? ViewGroup ?: return
         view.tag = TOAST_TAG
-        decor.addView(
-            view,
-            ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-        )
+        decor.addView(view)
     }
 
     private fun findHostActivity(context: Context): Activity? {
