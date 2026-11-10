@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Clint Browser</string>
+    <string name="app_name">Clint Beta</string>
     <string name="clint_downloader_label">Clint Downloader</string>
     <string name="back">Назад</string>
     <string name="forward">Вперёд</string>
