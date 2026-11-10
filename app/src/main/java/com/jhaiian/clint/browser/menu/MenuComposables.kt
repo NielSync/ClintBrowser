@@ -11,12 +11,14 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.DataSaverOn
 import androidx.compose.material.icons.filled.DesktopWindows
 import androidx.compose.material.icons.filled.Download
+import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.automirrored.filled.OpenInNew
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Tune
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.Security
 import androidx.compose.material.icons.filled.VisibilityOff
@@ -27,6 +29,7 @@ import androidx.compose.material.icons.automirrored.filled.VolumeUp
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -55,6 +58,13 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
+import androidx.compose.animation.core.tween
+import androidx.compose.ui.draw.rotate
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -390,6 +400,7 @@ private fun BrowserMenuContent(
     modifier: Modifier = Modifier
 ) {
     val colors = LocalClintColors.current
+    var togglesExpanded by remember { mutableStateOf(false) }
     Column(
         modifier = modifier
             .clip(RoundedCornerShape(16.dp))
@@ -419,9 +430,89 @@ private fun BrowserMenuContent(
             }
             MenuDivider()
         }
-        snapshot.visibleMenuItems.forEach { item -> MenuItemRowFor(item, snapshot, actions) }
+        val items = snapshot.visibleMenuItems
+        val firstToggleIndex = items.indexOfFirst { it in TOGGLE_MENU_ITEMS }
+        if (firstToggleIndex == -1) {
+            items.forEach { item -> MenuItemRowFor(item, snapshot, actions) }
+        } else {
+            items.take(firstToggleIndex).forEach { item -> MenuItemRowFor(item, snapshot, actions) }
+            MenuDivider()
+            QuickTogglesRow(expanded = togglesExpanded, onClick = { togglesExpanded = !togglesExpanded })
+            AnimatedVisibility(
+                visible = togglesExpanded,
+                enter = fadeIn(tween(160)) + expandVertically(tween(200)),
+                exit = fadeOut(tween(140)) + shrinkVertically(tween(180))
+            ) {
+                Column {
+                    items.filter { it in TOGGLE_MENU_ITEMS }.forEach { item ->
+                        Box(modifier = Modifier.padding(start = 10.dp)) {
+                            MenuItemRowFor(item, snapshot, actions)
+                        }
+                    }
+                }
+            }
+            items.drop(firstToggleIndex).filterNot { it in TOGGLE_MENU_ITEMS }.forEach { item ->
+                MenuItemRowFor(item, snapshot, actions)
+            }
+        }
         MenuDivider()
         MenuItemRow(androidx.compose.material.icons.Icons.Filled.Settings, stringResource(R.string.settings), onClick = actions.onSettings)
+    }
+}
+
+private val TOGGLE_MENU_ITEMS = setOf(
+    CustomizableMenuItem.MEDIA_CAPTURE,
+    CustomizableMenuItem.USER_SCRIPTS,
+    CustomizableMenuItem.QUIVER_GUARD,
+    CustomizableMenuItem.DISABLE_QUIVER_GUARD_FOR_SITE,
+    CustomizableMenuItem.WEBSITE_BLOCKER,
+    CustomizableMenuItem.TRANSLATE,
+    CustomizableMenuItem.DESKTOP_MODE,
+    CustomizableMenuItem.DATA_SAVER,
+    CustomizableMenuItem.DISABLE_DATA_SAVER_FOR_SITE,
+    CustomizableMenuItem.MUTE_TAB
+)
+
+@Composable
+private fun QuickTogglesRow(expanded: Boolean, onClick: () -> Unit) {
+    val colors = LocalClintColors.current
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(56.dp)
+            .clickable(onClick = onClick)
+            .padding(horizontal = 16.dp)
+    ) {
+        Box(modifier = Modifier.size(34.dp)) {
+            Box(
+                modifier = Modifier
+                    .matchParentSize()
+                    .clip(RoundedCornerShape(10.dp))
+                    .background(colors.primary.copy(alpha = 0.12f)),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = androidx.compose.material.icons.Icons.Filled.Tune,
+                    contentDescription = null,
+                    tint = colors.primary,
+                    modifier = Modifier.size(18.dp)
+                )
+            }
+        }
+        Text(
+            text = stringResource(R.string.menu_quick_toggles),
+            color = colors.popupText,
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Medium,
+            modifier = Modifier.weight(1f).padding(start = 14.dp)
+        )
+        Icon(
+            imageVector = androidx.compose.material.icons.Icons.Filled.ExpandMore,
+            contentDescription = null,
+            tint = colors.popupText,
+            modifier = Modifier.size(18.dp).rotate(if (expanded) 180f else 0f)
+        )
     }
 }
 

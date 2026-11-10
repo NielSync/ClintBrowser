@@ -30,8 +30,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.jhaiian.clint.R
-import com.jhaiian.clint.backup.AuthGateResult
-import com.jhaiian.clint.backup.BackupAuthGate
 import com.jhaiian.clint.backup.RestoreManager
 import com.jhaiian.clint.backup.StageResult
 import com.jhaiian.clint.backup.UnlockResult
@@ -61,10 +59,6 @@ fun SetupRestorePage(
 
     val okLabel = stringResource(R.string.backup_generic_ok)
     val cancelLabel = stringResource(R.string.action_cancel)
-    val authTitle = stringResource(R.string.backup_auth_title)
-    val authSubtitleRestore = stringResource(R.string.backup_auth_subtitle_restore)
-    val authUnavailableTitle = stringResource(R.string.backup_auth_unavailable_title)
-    val authUnavailableMessage = stringResource(R.string.backup_auth_unavailable_message)
     val restoreInvalidTitle = stringResource(R.string.restore_invalid_title)
     val restoreInvalidMessage = stringResource(R.string.restore_invalid_message)
     val restoreUnsupportedTitle = stringResource(R.string.restore_unsupported_title)
@@ -166,17 +160,10 @@ fun SetupRestorePage(
     }
 
     fun startRestoreFlow() {
-        if (!BackupAuthGate.isAuthenticationAvailable(activity)) {
-            simpleDialog = ConfirmDialogConfig(title = authUnavailableTitle, message = authUnavailableMessage, positiveLabel = okLabel)
-            return
-        }
-        scope.launch {
-            when (BackupAuthGate.authenticate(activity, authTitle, authSubtitleRestore)) {
-                is AuthGateResult.Success -> openDocumentLauncher.launch(arrayOf("*/*"))
-                is AuthGateResult.NotAvailable -> simpleDialog = ConfirmDialogConfig(title = authUnavailableTitle, message = authUnavailableMessage, positiveLabel = okLabel)
-                else -> Unit
-            }
-        }
+        // No lock-screen gate, matching the in-app restore flow: unencrypted backups
+        // must be importable on devices without a secure lock screen; encrypted
+        // backups are protected by their own password.
+        openDocumentLauncher.launch(arrayOf("*/*"))
     }
 
     ConfirmDialogHost(config = simpleDialog, hideStatusBar = hideStatusBar, hideSystemNavigation = hideSystemNavigation, onDismiss = { simpleDialog = null })
