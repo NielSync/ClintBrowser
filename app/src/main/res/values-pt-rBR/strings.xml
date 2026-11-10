@@ -533,6 +533,8 @@
     <string name="summarize_shake_desc">Agite o dispositivo para resumir a página atual</string>
     <string name="menu_find_in_page">Localizar na página</string>
     <string name="menu_quick_toggles">Alternâncias rápidas</string>
+    <string name="tab_menu_mode_tabs">Guias</string>
+    <string name="tab_menu_no_incognito_tabs">Nenhuma guia anônima</string>
     <string name="find_in_page_hint">Localizar na página</string>
     <string name="find_previous_match">Correspondência anterior</string>
     <string name="find_next_match">Próxima correspondência</string>

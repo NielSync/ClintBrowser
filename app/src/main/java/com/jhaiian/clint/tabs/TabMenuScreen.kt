@@ -14,6 +14,8 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
 import androidx.compose.foundation.layout.Box
@@ -44,6 +46,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Public
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Icon
@@ -68,8 +71,11 @@ import kotlinx.coroutines.withContext
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalHapticFeedback
@@ -80,6 +86,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
@@ -260,7 +267,15 @@ fun TabMenuScreen(activity: MainActivity, onDismiss: () -> Unit) {
     var listView by remember { mutableStateOf(prefs.getBoolean(PREF_TAB_MENU_LIST_VIEW, false)) }
     var buttonsAtBottom by remember { mutableStateOf(prefs.getBoolean(PREF_TAB_MENU_BUTTONS_AT_BOTTOM, false)) }
     var tabsAtBottom by remember { mutableStateOf(prefs.getBoolean(PREF_TAB_MENU_TABS_AT_BOTTOM, false)) }
-    val hasDuplicates by remember { derivedStateOf { duplicateTabIds(tabs, activeTabId).isNotEmpty() } }
+    // Mode separation: normal and incognito tabs are never shown on the same screen.
+    // The switcher opens on the mode of the tab the user came from.
+    var switcherIncognito by remember { mutableStateOf(tabManager.activeTab?.isIncognito == true) }
+    val visibleTabs = tabs.filter { it.isIncognito == switcherIncognito }
+    val hasDuplicates by remember {
+        derivedStateOf {
+            duplicateTabIds(tabs.filter { it.isIncognito == switcherIncognito }, activeTabId).isNotEmpty()
+        }
+    }
 
     fun closeSearch() {
         searchActive = false
@@ -418,7 +433,7 @@ fun TabMenuScreen(activity: MainActivity, onDismiss: () -> Unit) {
     BoxWithConstraints(Modifier.fillMaxSize().background(colors.surface).statusBarsPadding().navigationBarsPadding()) {
         val columns = ((maxWidth - GridEdgePadding * 2) / if (listView) ListCellMinWidth else CellMinWidth).toInt().coerceAtLeast(1)
         val initialIndex = remember {
-            val renderList = buildRenderList(tabs, groups, columns, reversed = tabsAtBottom)
+            val renderList = buildRenderList(tabs.filter { it.isIncognito == switcherIncognito }, groups, columns, reversed = tabsAtBottom)
             val activeGroupId = tabs.firstOrNull { it.id == activeTabId }?.groupId
             val focusIndex = focusGroupId?.let { id -> renderList.indexOfFirst { it.key == groupHeaderKey(id) } } ?: -1
             val activeIndex = renderList.indexOfFirst { it is TabMenuItem.Tab && it.preview.id == activeTabId }
@@ -434,8 +449,9 @@ fun TabMenuScreen(activity: MainActivity, onDismiss: () -> Unit) {
         val renderList by remember(columns, tabsAtBottom) {
             derivedStateOf {
                 val query = searchQuery.trim()
+                val pool = tabs.filter { it.isIncognito == switcherIncognito }
                 buildRenderList(
-                    if (query.isEmpty()) tabs.toList() else tabs.filter { it.matchesQuery(query) },
+                    if (query.isEmpty()) pool else pool.filter { it.matchesQuery(query) },
                     groups,
                     columns,
                     forceCollapsed = dragState.draggingGroupId != null,
@@ -453,9 +469,9 @@ fun TabMenuScreen(activity: MainActivity, onDismiss: () -> Unit) {
             dragState.columns = columns
             dragState.mergeEnabled = groupsEnabled
         }
-        val shownGroups = visibleGroups(tabs, groups)
-        val groupCounts = tabs.groupingBy { it.groupId ?: "" }.eachCount()
-        val activeGroupId = tabs.firstOrNull { it.id == activeTabId }?.groupId
+        val shownGroups = visibleGroups(visibleTabs, groups)
+        val groupCounts = visibleTabs.groupingBy { it.groupId ?: "" }.eachCount()
+        val activeGroupId = visibleTabs.firstOrNull { it.id == activeTabId }?.groupId
 
         LaunchedEffect(scrollToGroupId, renderList.size) {
             val target = scrollToGroupId ?: return@LaunchedEffect
@@ -690,7 +706,7 @@ fun TabMenuScreen(activity: MainActivity, onDismiss: () -> Unit) {
 
         val topBar: @Composable () -> Unit = {
             TabMenuTopBar(
-                tabCount = tabs.size,
+                tabCount = visibleTabs.size,
                 selectionMode = uiState.selectionMode,
                 selectedCount = uiState.selectedIds.size,
                 groupsEnabled = groupsEnabled,
@@ -712,8 +728,8 @@ fun TabMenuScreen(activity: MainActivity, onDismiss: () -> Unit) {
                     closeTabs(ids, activity.resources.getQuantityString(R.plurals.tab_menu_closed_duplicates, ids.size, ids.size))
                 }) else null,
                 onToggleSelectionMode = { uiState.selectionMode = true },
-                onSelectAll = { uiState.selectAll(tabs.map { it.id }) },
-                onInvertSelection = { uiState.invertSelection(tabs.map { it.id }) },
+                onSelectAll = { uiState.selectAll(visibleTabs.map { it.id }) },
+                onInvertSelection = { uiState.invertSelection(visibleTabs.map { it.id }) },
                 onDeleteSelected = { closeTabs(uiState.selectedIds.toList()); uiState.exitSelectionMode() },
                 onNewTab = { activity.onNewTab(); onDismiss() },
                 onNewIncognitoTab = { activity.onNewIncognitoTab(); onDismiss() },
@@ -732,7 +748,7 @@ fun TabMenuScreen(activity: MainActivity, onDismiss: () -> Unit) {
                         showProfilePicker = true
                     }
                 },
-                onCloseAllTabs = { closeTabs(tabs.map { it.id }) },
+                onCloseAllTabs = { closeTabs(visibleTabs.map { it.id }) },
                 buttonsAtBottom = buttonsAtBottom,
                 onToggleButtonsAtBottom = {
                     buttonsAtBottom = !buttonsAtBottom
@@ -747,27 +763,39 @@ fun TabMenuScreen(activity: MainActivity, onDismiss: () -> Unit) {
         }
 
         val newTabButtons: @Composable () -> Unit = {
-            Row(
-                Modifier.fillMaxWidth().padding(
-                    start = 16.dp,
-                    end = 16.dp,
-                    top = if (buttonsAtBottom) 4.dp else 0.dp,
-                    bottom = if (buttonsAtBottom) 4.dp else 10.dp
-                )
-            ) {
-                NewTabButton(
-                    text = stringResource(R.string.new_tab),
-                    iconRes = Icons.Filled.Add,
-                    modifier = Modifier.weight(1f).padding(end = 6.dp),
-                    onClick = { activity.onNewTab(); onDismiss() }
-                )
-                NewTabButton(
-                    text = stringResource(R.string.new_incognito_tab),
-                    iconRes = Icons.Filled.VisibilityOff,
-                    modifier = Modifier.weight(1f).padding(start = 6.dp),
-                    onClick = { activity.onNewIncognitoTab(); onDismiss() }
-                )
-            }
+            NewTabButton(
+                text = stringResource(if (switcherIncognito) R.string.new_incognito_tab else R.string.new_tab),
+                iconRes = if (switcherIncognito) Icons.Filled.VisibilityOff else Icons.Filled.Add,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = if (buttonsAtBottom) 4.dp else 0.dp),
+                onClick = {
+                    if (switcherIncognito) activity.onNewIncognitoTab() else activity.onNewTab()
+                    onDismiss()
+                }
+            )
+        }
+
+        val modeToggle: @Composable () -> Unit = {
+            ModeToggleRow(
+                incognitoSelected = switcherIncognito,
+                normalCount = tabs.count { !it.isIncognito },
+                incognitoCount = tabs.count { it.isIncognito },
+                onPickNormal = {
+                    if (switcherIncognito) {
+                        switcherIncognito = false
+                        uiState.exitSelectionMode()
+                        closeSearch()
+                    }
+                },
+                onPickIncognito = {
+                    if (!switcherIncognito) {
+                        switcherIncognito = true
+                        uiState.exitSelectionMode()
+                        closeSearch()
+                    }
+                }
+            )
         }
 
         val groupChips: @Composable () -> Unit = {
@@ -802,6 +830,7 @@ fun TabMenuScreen(activity: MainActivity, onDismiss: () -> Unit) {
         }
 
         Column(Modifier.fillMaxSize()) {
+            modeToggle()
             if (!buttonsAtBottom) {
                 topBar()
                 quickActions()
@@ -813,8 +842,12 @@ fun TabMenuScreen(activity: MainActivity, onDismiss: () -> Unit) {
                     .weight(1f)
                     .onGloballyPositioned { dragState.gridOriginInRoot = it.positionInRoot() }
             ) {
-                if (tabs.isEmpty()) {
-                    Text(stringResource(R.string.no_tabs), color = colors.secondaryText, modifier = Modifier.align(Alignment.Center))
+                if (visibleTabs.isEmpty()) {
+                    Text(
+                        stringResource(if (switcherIncognito) R.string.tab_menu_no_incognito_tabs else R.string.no_tabs),
+                        color = colors.secondaryText,
+                        modifier = Modifier.align(Alignment.Center)
+                    )
                 } else if (renderList.isEmpty()) {
                     Text(
                         stringResource(R.string.tab_menu_search_no_results),
@@ -1126,6 +1159,85 @@ fun TabMenuScreen(activity: MainActivity, onDismiss: () -> Unit) {
                 topBar()
             }
         }
+    }
+}
+
+@Composable
+private fun ModeToggleRow(
+    incognitoSelected: Boolean,
+    normalCount: Int,
+    incognitoCount: Int,
+    onPickNormal: () -> Unit,
+    onPickIncognito: () -> Unit
+) {
+    Row(
+        Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 4.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        ModeChip(
+            selected = !incognitoSelected,
+            icon = Icons.Filled.Public,
+            label = stringResource(R.string.tab_menu_mode_tabs),
+            count = normalCount,
+            modifier = Modifier.weight(1f),
+            onClick = onPickNormal
+        )
+        ModeChip(
+            selected = incognitoSelected,
+            icon = Icons.Filled.VisibilityOff,
+            label = stringResource(R.string.incognito),
+            count = incognitoCount,
+            modifier = Modifier.weight(1f),
+            onClick = onPickIncognito
+        )
+    }
+}
+
+@Composable
+private fun ModeChip(
+    selected: Boolean,
+    icon: ImageVector,
+    label: String,
+    count: Int,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit
+) {
+    val colors = LocalClintColors.current
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier
+            .clip(RoundedCornerShape(14.dp))
+            .background(if (selected) colors.primary.copy(alpha = 0.14f) else colors.surfaceVariant)
+            .border(
+                width = if (selected) 1.5.dp else 0.dp,
+                color = if (selected) colors.primary else Color.Transparent,
+                shape = RoundedCornerShape(14.dp)
+            )
+            .clickable(onClick = onClick)
+            .padding(horizontal = 14.dp, vertical = 10.dp)
+    ) {
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            tint = if (selected) colors.primary else colors.secondaryText,
+            modifier = Modifier.size(16.dp)
+        )
+        Text(
+            text = label,
+            color = if (selected) colors.primary else colors.onSurface,
+            fontSize = 13.sp,
+            fontWeight = if (selected) FontWeight.SemiBold else FontWeight.Medium,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier.padding(start = 8.dp).weight(1f)
+        )
+        Text(
+            text = count.toString(),
+            color = colors.secondaryText,
+            fontSize = 12.sp
+        )
     }
 }
 

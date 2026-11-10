@@ -535,6 +535,8 @@
     <string name="summarize_shake_desc">Agita el dispositivo para resumir la página actual</string>
     <string name="menu_find_in_page">Buscar en la página</string>
     <string name="menu_quick_toggles">Ajustes rápidos</string>
+    <string name="tab_menu_mode_tabs">Pestañas</string>
+    <string name="tab_menu_no_incognito_tabs">No hay pestañas de incógnito</string>
     <string name="find_in_page_hint">Buscar en la página</string>
     <string name="find_previous_match">Coincidencia anterior</string>
     <string name="find_next_match">Coincidencia siguiente</string>
