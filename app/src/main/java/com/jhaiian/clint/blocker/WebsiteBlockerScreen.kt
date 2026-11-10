@@ -5,6 +5,7 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Speed
 import androidx.compose.material.icons.filled.Public
 import androidx.compose.material.icons.filled.Save
 import androidx.compose.material.icons.filled.Search
@@ -118,6 +119,7 @@ fun WebsiteBlockerScreen(
     maxContentWidth: Dp?,
     onExit: () -> Unit,
     onMasterToggle: (Boolean) -> Unit,
+    onAsyncLoadToggle: (Boolean) -> Unit,
     onAdditionalWebsitesClick: () -> Unit,
     onItemToggle: (WebsiteBlockerCategory, Boolean) -> Unit,
     onDeleteSelected: () -> Unit,
@@ -193,6 +195,8 @@ fun WebsiteBlockerScreen(
             }
 
             MasterSwitchRow(masterEnabled = state.masterEnabled, onToggle = onMasterToggle)
+
+            AsyncLoadRow(enabled = state.asyncLoadEnabled, onToggle = onAsyncLoadToggle)
 
             Text(
                 stringResource(R.string.website_blocker_section_categories),
@@ -273,6 +277,21 @@ private fun MasterSwitchRow(masterEnabled: Boolean, onToggle: (Boolean) -> Unit)
         onClick = { onToggle(!masterEnabled) },
         trailing = {
             ClintSwitch(checked = masterEnabled)
+        }
+    )
+}
+
+@Composable
+private fun AsyncLoadRow(enabled: Boolean, onToggle: (Boolean) -> Unit) {
+    val colors = LocalClintColors.current
+    SettingsRow(
+        icon = androidx.compose.material.icons.Icons.Filled.Speed,
+        title = stringResource(R.string.website_blocker_async_load_title),
+        summary = stringResource(R.string.website_blocker_async_load_summary),
+        colors = colors,
+        onClick = { onToggle(!enabled) },
+        trailing = {
+            ClintSwitch(checked = enabled)
         }
     )
 }

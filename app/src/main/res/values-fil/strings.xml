@@ -1812,6 +1812,8 @@
 
     <string name="website_blocker_title">Website Blocker</string>
     <string name="website_blocker_settings_summary">Harangan ang pornograpiya, sugal, at iba pang website.</string>
+    <string name="website_blocker_async_load_title">I-load ang database sa background</string>
+    <string name="website_blocker_async_load_summary">Ilo-load ang blocker database nang hiwalay sa main thread sa pagbukas para mas mabilis na cold start. Maaaring mag-load ang unang pahina bago ma-check ang database.</string>
     <string name="website_blocker_status_working">Pinoproseso\u2026</string>
     <string name="website_blocker_status_active">Protektado ka laban sa %d kilalang domain</string>
     <string name="website_blocker_fab_save_desc">I-save at i-apply ang mga pagbabago</string>

@@ -1808,6 +1808,8 @@
 
     <string name="website_blocker_title">वेबसाइट ब्लॉकर</string>
     <string name="website_blocker_settings_summary">पोर्नोग्राफ़ी, जुए और दूसरी वेबसाइटें ब्लॉक करें।</string>
+    <string name="website_blocker_async_load_title">डेटाबेस बैकग्राउंड में लोड करें</string>
+    <string name="website_blocker_async_load_summary">तेज़ कोल्ड स्टार्ट के लिए ब्लॉकर डेटाबेस को स्टार्टअप पर मुख्य थ्रेड से अलग लोड करता है। डेटाबेस जांचे जाने से पहले पहला पेज लोड हो सकता है।</string>
     <string name="website_blocker_status_working">काम चल रहा है…</string>
     <string name="website_blocker_status_active">%d जाने-पहचाने डोमेन से आपकी सुरक्षा कर रहा है</string>
     <string name="website_blocker_fab_save_desc">बदलाव सेव करें और लागू करें</string>

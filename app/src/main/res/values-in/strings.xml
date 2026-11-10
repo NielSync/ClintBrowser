@@ -1787,6 +1787,8 @@
 
     <string name="website_blocker_title">Pemblokir Situs</string>
     <string name="website_blocker_settings_summary">Blokir situs pornografi, judi, dan situs lainnya.</string>
+    <string name="website_blocker_async_load_title">Muat database di latar belakang</string>
+    <string name="website_blocker_async_load_summary">Memuat database pemblokir di luar thread utama saat startup untuk cold start yang lebih cepat. Halaman pertama dapat dimuat sebelum database diperiksa.</string>
     <string name="website_blocker_status_working">Memproses…</string>
     <string name="website_blocker_status_active">Melindungi Anda dari %d domain yang dikenal</string>
     <string name="website_blocker_fab_save_desc">Simpan dan terapkan perubahan</string>

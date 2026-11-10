@@ -37,6 +37,7 @@ class WebsiteBlockerUiState {
     var categories by mutableStateOf(emptyList<WebsiteBlockerCategory>())
     var additionalWebsitesCount by mutableStateOf(0)
     var masterEnabled by mutableStateOf(false)
+    var asyncLoadEnabled by mutableStateOf(false)
 
     var searchQuery by mutableStateOf("")
     var isSearchMode by mutableStateOf(false)

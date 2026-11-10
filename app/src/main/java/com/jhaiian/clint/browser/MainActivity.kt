@@ -298,6 +298,7 @@ class MainActivity : ClintActivity(), OverlayHostActivity, SnackbarHostActivity,
     private val prefsListener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
         when (key) {
             "javascript_enabled" -> applyJavaScript()
+            com.jhaiian.clint.browser.delegates.PREF_ASYNC_BLOCKER_LOAD -> initializeWebsiteBlockerEngine()
             "block_third_party_cookies" -> applyCookiePolicy()
             "do_not_track", com.jhaiian.clint.privacy.PrivacyPrefs.GLOBAL_PRIVACY_CONTROL,
             com.jhaiian.clint.privacy.PrivacyPrefs.WEBRTC_PROTECTION -> applyDoNotTrackSettings()

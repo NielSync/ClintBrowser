@@ -1829,6 +1829,8 @@
 
     <string name="website_blocker_title">Bloqueador de sitios web</string>
     <string name="website_blocker_settings_summary">Bloquea pornografía, apuestas y otros sitios web.</string>
+    <string name="website_blocker_async_load_title">Cargar base de datos en segundo plano</string>
+    <string name="website_blocker_async_load_summary">Carga la base de datos del bloqueador fuera del hilo principal al inicio para un arranque más rápido. La primera página puede cargarse antes de que se compruebe la base de datos.</string>
     <string name="website_blocker_status_working">Trabajando…</string>
     <string name="website_blocker_status_active">Protegiéndote de %d dominios conocidos</string>
     <string name="website_blocker_fab_save_desc">Guardar y aplicar cambios</string>

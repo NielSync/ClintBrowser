@@ -138,6 +138,8 @@ class WebsiteBlockerActivity : ClintActivity() {
 
         uiState = WebsiteBlockerUiState()
         uiState.masterEnabled = prefs.getBoolean(PREF_ENABLED, false)
+        uiState.asyncLoadEnabled = prefs.getBoolean(
+            com.jhaiian.clint.browser.delegates.PREF_ASYNC_BLOCKER_LOAD, false)
         reload()
 
         setContent {
@@ -151,6 +153,11 @@ class WebsiteBlockerActivity : ClintActivity() {
                         onMasterToggle = { enabled ->
                             uiState.masterEnabled = enabled
                             prefs.edit().putBoolean(PREF_ENABLED, enabled).apply()
+                        },
+                        onAsyncLoadToggle = { enabled ->
+                            uiState.asyncLoadEnabled = enabled
+                            prefs.edit().putBoolean(
+                                com.jhaiian.clint.browser.delegates.PREF_ASYNC_BLOCKER_LOAD, enabled).apply()
                         },
                         onAdditionalWebsitesClick = {
                             startActivity(android.content.Intent(this@WebsiteBlockerActivity, AdditionalWebsitesActivity::class.java))

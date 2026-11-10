@@ -1864,6 +1864,8 @@
 
     <string name="website_blocker_title">Блокировщик сайтов</string>
     <string name="website_blocker_settings_summary">Блокировка порнографии, азартных игр и других сайтов.</string>
+    <string name="website_blocker_async_load_title">Загружать базу в фоне</string>
+    <string name="website_blocker_async_load_summary">Загружает базу блокировщика вне основного потока при запуске для более быстрого старта. Первая страница может загрузиться до проверки базы.</string>
     <string name="website_blocker_status_working">Обработка…</string>
     <string name="website_blocker_status_active">Защита от %d известных доменов</string>
     <string name="website_blocker_fab_save_desc">Сохранить и применить изменения</string>

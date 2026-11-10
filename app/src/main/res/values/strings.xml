@@ -1822,6 +1822,8 @@
 
     <string name="website_blocker_title">Website Blocker</string>
     <string name="website_blocker_settings_summary">Block pornography, gambling, and other websites.</string>
+    <string name="website_blocker_async_load_title">Load database in background</string>
+    <string name="website_blocker_async_load_summary">Load the blocker database off the main thread at startup for a faster cold start. The first page may load before the database is checked.</string>
     <string name="website_blocker_status_working">Working…</string>
     <string name="website_blocker_status_active">Protecting you from %d known domains</string>
     <string name="website_blocker_fab_save_desc">Save and apply changes</string>
