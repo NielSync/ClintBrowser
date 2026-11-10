@@ -530,8 +530,6 @@
     <string name="summarize_shake_desc">Goyangkan perangkat untuk meringkas halaman saat ini</string>
     <string name="menu_find_in_page">Temukan di halaman</string>
     <string name="menu_quick_toggles">Saklar cepat</string>
-    <string name="tab_menu_mode_tabs">Tab</string>
-    <string name="tab_menu_no_incognito_tabs">Tidak ada tab samaran</string>
     <string name="find_in_page_hint">Temukan di halaman</string>
     <string name="find_previous_match">Kecocokan sebelumnya</string>
     <string name="find_next_match">Kecocokan berikutnya</string>
