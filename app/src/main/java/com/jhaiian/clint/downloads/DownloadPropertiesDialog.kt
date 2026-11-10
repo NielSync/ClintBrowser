@@ -8,6 +8,7 @@ import android.content.Context
 import android.net.Uri
 import android.os.Build
 import android.provider.DocumentsContract
+import android.widget.Toast
 import androidx.documentfile.provider.DocumentFile
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -44,7 +45,6 @@ import java.io.FileInputStream
 import java.security.MessageDigest
 import java.text.SimpleDateFormat
 import java.util.Locale
-import com.jhaiian.clint.ui.ClintToast
 
 @Composable
 fun DownloadPropertiesDialog(
@@ -94,7 +94,7 @@ fun DownloadPropertiesDialog(
         val cm = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         cm.setPrimaryClip(ClipData.newPlainText("", value))
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
-            ClintToast.show(context, context.getString(R.string.download_props_copied))
+            Toast.makeText(context, context.getString(R.string.download_props_copied), Toast.LENGTH_SHORT).show()
         }
     }
 

@@ -2,6 +2,7 @@ package com.jhaiian.clint.browser.delegates
 import com.jhaiian.clint.browser.MainActivity
 
 import android.graphics.Bitmap
+import android.widget.Toast
 import com.jhaiian.clint.R
 import com.jhaiian.clint.profiles.WebProfiles
 import com.jhaiian.clint.shortcuts.ShortcutIconStore
@@ -11,7 +12,6 @@ import com.jhaiian.clint.shortcuts.ShortcutStore
 import com.jhaiian.clint.shortcuts.ShortcutTabSessionManager
 import com.jhaiian.clint.shortcuts.WebAppShortcut
 import java.util.UUID
-import com.jhaiian.clint.ui.ClintToast
 
 internal fun MainActivity.syncFramelessShortcuts() {
     val ids = ShortcutStore.framelessIds(this)
@@ -46,7 +46,7 @@ internal fun MainActivity.applyShortcutFrameless(shortcutId: String?) {
 
 internal fun MainActivity.createHomeScreenShortcut(url: String, name: String, icon: Bitmap?, frameless: Boolean, profileId: String = WebProfiles.DEFAULT_ID) {
     if (!ShortcutPinner.isSupported(this)) {
-        ClintToast.show(this, getString(R.string.create_shortcut_unsupported))
+        Toast.makeText(this, getString(R.string.create_shortcut_unsupported), Toast.LENGTH_SHORT).show()
         return
     }
     val shortcutId = "webapp_${UUID.randomUUID()}"

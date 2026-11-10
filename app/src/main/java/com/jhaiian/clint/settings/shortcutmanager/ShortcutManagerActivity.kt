@@ -2,6 +2,7 @@ package com.jhaiian.clint.settings.shortcutmanager
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
@@ -23,7 +24,6 @@ import com.jhaiian.clint.ui.theme.ClintComposeTheme
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import com.jhaiian.clint.ui.ClintToast
 
 class ShortcutManagerActivity : ClintActivity() {
 
@@ -86,15 +86,15 @@ class ShortcutManagerActivity : ClintActivity() {
 
     private fun pinShortcut(shortcut: WebAppShortcut) {
         if (!ShortcutPinner.isSupported(this)) {
-            ClintToast.show(this, getString(R.string.create_shortcut_unsupported))
+            Toast.makeText(this, getString(R.string.create_shortcut_unsupported), Toast.LENGTH_SHORT).show()
             return
         }
         val alreadyPinned = ShortcutPinner.isPinned(this, shortcut.id)
         val requested = runCatching { ShortcutPinner.requestPin(this, shortcut) }.getOrDefault(false)
         if (!requested) {
-            ClintToast.show(this, getString(R.string.create_shortcut_unsupported))
+            Toast.makeText(this, getString(R.string.create_shortcut_unsupported), Toast.LENGTH_SHORT).show()
         } else if (alreadyPinned) {
-            ClintToast.show(this, getString(R.string.shortcut_manager_already_pinned))
+            Toast.makeText(this, getString(R.string.shortcut_manager_already_pinned), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -127,10 +127,11 @@ class ShortcutManagerActivity : ClintActivity() {
             withContext(Dispatchers.IO) { removeShortcuts(ids.toList()) }
             uiState.shortcuts = uiState.shortcuts.filterNot { it.id in ids }
             uiState.exitSelectionMode()
-            ClintToast.show(
+            Toast.makeText(
                 this@ShortcutManagerActivity,
-                resources.getQuantityString(R.plurals.shortcut_manager_deleted_count, ids.size, ids.size)
-            )
+                resources.getQuantityString(R.plurals.shortcut_manager_deleted_count, ids.size, ids.size),
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
 

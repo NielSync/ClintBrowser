@@ -1,5 +1,6 @@
 package com.jhaiian.clint.quiver
 
+import android.widget.Toast
 
 import com.jhaiian.clint.R
 import com.jhaiian.clint.ui.listscreen.ConfirmDialogConfig
@@ -7,7 +8,6 @@ import com.jhaiian.clint.util.formatFileSize
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import com.jhaiian.clint.ui.ClintToast
 
 internal fun QuiverGuardActivity.showFilterListUpdateConfirmation() {
     if (uiState.isUpdateRunning || uiState.isCompileRunning) return
@@ -108,11 +108,11 @@ internal fun QuiverGuardActivity.startFilterListUpdateCheck(
             onUpdateCheckComplete(updatedResults, failedResults, upToDateCount)
         } catch (e: CancellationException) {
             uiState.updateProgress = null
-            ClintToast.show(this@startFilterListUpdateCheck, getString(R.string.filter_list_update_cancelled))
+            Toast.makeText(this@startFilterListUpdateCheck, getString(R.string.filter_list_update_cancelled), Toast.LENGTH_SHORT).show()
             throw e
         } catch (_: Exception) {
             uiState.updateProgress = null
-            ClintToast.show(this@startFilterListUpdateCheck, getString(R.string.filter_list_update_error_generic))
+            Toast.makeText(this@startFilterListUpdateCheck, getString(R.string.filter_list_update_error_generic), Toast.LENGTH_SHORT).show()
         } finally {
             uiState.isUpdateRunning = false
         }
@@ -128,10 +128,10 @@ private fun QuiverGuardActivity.onUpdateCheckComplete(
 
     when {
         updatedResults.isEmpty() && failedResults.isEmpty() -> {
-            ClintToast.show(this, getString(R.string.filter_list_update_all_up_to_date))
+            Toast.makeText(this, getString(R.string.filter_list_update_all_up_to_date), Toast.LENGTH_SHORT).show()
         }
         updatedResults.isNotEmpty() && failedResults.isEmpty() -> {
-            ClintToast.show(this, getString(R.string.filter_list_update_success_recompiling, updatedResults.size))
+            Toast.makeText(this, getString(R.string.filter_list_update_success_recompiling, updatedResults.size), Toast.LENGTH_SHORT).show()
             triggerRecompilationAfterUpdate()
         }
         updatedResults.isNotEmpty() && failedResults.isNotEmpty() -> {
@@ -170,7 +170,7 @@ internal fun QuiverGuardActivity.getActiveFilterLists(): List<FilterList> =
 
 internal fun QuiverGuardActivity.showActiveFilterListUpdateConfirmation(forceUpdate: Boolean) {
     if (uiState.isUpdateRunning || uiState.isCompileRunning) {
-        ClintToast.show(this, getString(R.string.filter_list_operation_in_progress))
+        Toast.makeText(this, getString(R.string.filter_list_operation_in_progress), Toast.LENGTH_SHORT).show()
         return
     }
     val activeLists = getActiveFilterLists().filter { !it.isLocal }
@@ -205,7 +205,7 @@ internal fun QuiverGuardActivity.showActiveFilterListUpdateConfirmation(forceUpd
 
 internal fun QuiverGuardActivity.showForceUpdateAllConfirmation() {
     if (uiState.isUpdateRunning || uiState.isCompileRunning) {
-        ClintToast.show(this, getString(R.string.filter_list_operation_in_progress))
+        Toast.makeText(this, getString(R.string.filter_list_operation_in_progress), Toast.LENGTH_SHORT).show()
         return
     }
     val downloadedCount = effectiveFilterLists().count { it.isDownloaded && !it.isLocal }
@@ -229,7 +229,7 @@ internal fun QuiverGuardActivity.showForceUpdateAllConfirmation() {
 internal fun QuiverGuardActivity.showRecompileConfirmation() {
     if (uiState.isCompileRunning) return
     if (uiState.isUpdateRunning) {
-        ClintToast.show(this, getString(R.string.filter_list_operation_in_progress))
+        Toast.makeText(this, getString(R.string.filter_list_operation_in_progress), Toast.LENGTH_SHORT).show()
         return
     }
     uiState.confirmDialog = ConfirmDialogConfig(

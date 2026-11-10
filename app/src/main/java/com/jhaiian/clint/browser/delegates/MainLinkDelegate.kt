@@ -10,8 +10,8 @@ import android.content.Intent
 import android.os.Handler
 import android.os.Looper
 import android.webkit.WebView
+import android.widget.Toast
 import com.jhaiian.clint.R
-import com.jhaiian.clint.ui.ClintToast
 
 internal fun MainActivity.setupLinkLongPress(webView: WebView) {
     webView.setOnLongClickListener {
@@ -89,7 +89,7 @@ internal fun MainActivity.handleLinkCopyAddress(url: String) {
     val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
     clipboard.setPrimaryClip(ClipData.newPlainText(getString(R.string.link_copy_address), url))
     if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.TIRAMISU) {
-        ClintToast.show(this, getString(R.string.link_address_copied))
+        Toast.makeText(this, getString(R.string.link_address_copied), Toast.LENGTH_SHORT).show()
     }
 }
 
@@ -101,7 +101,7 @@ internal fun MainActivity.copyCurrentPageLink(fallback: String) {
     val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
     clipboard.setPrimaryClip(ClipData.newPlainText(getString(R.string.address_bar_copy_link), url))
     if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.TIRAMISU) {
-        ClintToast.show(this, getString(R.string.address_bar_link_copied))
+        Toast.makeText(this, getString(R.string.address_bar_link_copied), Toast.LENGTH_SHORT).show()
     }
 }
 
@@ -109,7 +109,7 @@ internal fun MainActivity.handleLinkCopyText(text: String) {
     val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
     clipboard.setPrimaryClip(ClipData.newPlainText(getString(R.string.link_copy_text), text))
     if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.TIRAMISU) {
-        ClintToast.show(this, getString(R.string.link_text_copied))
+        Toast.makeText(this, getString(R.string.link_text_copied), Toast.LENGTH_SHORT).show()
     }
 }
 

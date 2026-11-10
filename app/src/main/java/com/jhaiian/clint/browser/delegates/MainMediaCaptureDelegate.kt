@@ -5,6 +5,7 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Intent
 import android.net.Uri
+import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceManager
 import com.jhaiian.clint.R
@@ -39,7 +40,6 @@ import com.jhaiian.clint.util.formatFileSize
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import com.jhaiian.clint.ui.ClintToast
 
 internal fun MainActivity.mountMediaCaptureDialog() {
     val tabId = tabManager.activeTab?.id ?: return
@@ -135,7 +135,7 @@ private fun MainActivity.offerRefreshLinkUpdate(
                 )
             }
             overlayContent = null
-            ClintToast.show(this, getString(R.string.refresh_link_updated_toast, session.filename))
+            Toast.makeText(this, getString(R.string.refresh_link_updated_toast, session.filename), Toast.LENGTH_SHORT).show()
             refreshLinkSession = null
         },
         onAddNew = onAddNew
@@ -147,7 +147,7 @@ private fun MainActivity.copyMediaCaptureLink(text: String) {
     val clipboard = getSystemService(ClipboardManager::class.java)
     clipboard.setPrimaryClip(ClipData.newPlainText(getString(R.string.media_capture_link_clip_label), text))
     if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.TIRAMISU) {
-        ClintToast.show(this, getString(R.string.media_capture_link_copied))
+        Toast.makeText(this, getString(R.string.media_capture_link_copied), Toast.LENGTH_SHORT).show()
     }
 }
 

@@ -11,6 +11,7 @@ import com.jhaiian.clint.browser.webview.loadJsAsset
 import android.content.Context
 import android.Manifest
 import android.util.TypedValue
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.webkit.WebViewFeature
 import com.jhaiian.clint.R
@@ -19,7 +20,6 @@ import com.jhaiian.clint.bookmarks.BookmarkManager
 import com.jhaiian.clint.history.HistoryItem
 import com.jhaiian.clint.history.SearchHistoryManager
 import com.jhaiian.clint.userscripts.maybeShowUserScriptInstallPrompt
-import com.jhaiian.clint.ui.ClintToast
 
 private const val SUGGESTION_HISTORY_LIMIT = 20
 private const val SUGGESTION_BOOKMARK_LIMIT = 10
@@ -456,6 +456,6 @@ internal fun MainActivity.launchVoiceSearch() {
             android.speech.RecognizerIntent.LANGUAGE_MODEL_WEB_SEARCH)
     }
     runCatching { voiceSearchLauncher.launch(intent) }.onFailure {
-        ClintToast.show(this, getString(R.string.voice_search_not_available))
+        Toast.makeText(this, getString(R.string.voice_search_not_available), Toast.LENGTH_SHORT).show()
     }
 }

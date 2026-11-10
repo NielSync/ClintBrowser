@@ -4,17 +4,17 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Intent
 import android.os.Build
+import android.widget.Toast
 import com.jhaiian.clint.R
 import com.jhaiian.clint.ui.listscreen.ConfirmDialogConfig
-import com.jhaiian.clint.ui.ClintToast
 
 internal fun WebsiteBlockerActivity.confirmCheckUpdateForItem(category: WebsiteBlockerCategory) {
     if (uiState.isDownloadRunning || uiState.isCompileRunning) {
-        ClintToast.show(this, getString(R.string.filter_list_operation_in_progress))
+        Toast.makeText(this, getString(R.string.filter_list_operation_in_progress), Toast.LENGTH_SHORT).show()
         return
     }
     if (!category.isDownloaded) {
-        ClintToast.show(this, getString(R.string.filter_list_item_not_downloaded, categoryTitle(category)))
+        Toast.makeText(this, getString(R.string.filter_list_item_not_downloaded, categoryTitle(category)), Toast.LENGTH_SHORT).show()
         return
     }
     uiState.confirmDialog = ConfirmDialogConfig(
@@ -28,11 +28,11 @@ internal fun WebsiteBlockerActivity.confirmCheckUpdateForItem(category: WebsiteB
 
 internal fun WebsiteBlockerActivity.confirmForceUpdateForItem(category: WebsiteBlockerCategory) {
     if (uiState.isDownloadRunning || uiState.isCompileRunning) {
-        ClintToast.show(this, getString(R.string.filter_list_operation_in_progress))
+        Toast.makeText(this, getString(R.string.filter_list_operation_in_progress), Toast.LENGTH_SHORT).show()
         return
     }
     if (!category.isDownloaded) {
-        ClintToast.show(this, getString(R.string.filter_list_item_not_downloaded, categoryTitle(category)))
+        Toast.makeText(this, getString(R.string.filter_list_item_not_downloaded, categoryTitle(category)), Toast.LENGTH_SHORT).show()
         return
     }
     uiState.confirmDialog = ConfirmDialogConfig(
@@ -46,7 +46,7 @@ internal fun WebsiteBlockerActivity.confirmForceUpdateForItem(category: WebsiteB
 
 internal fun WebsiteBlockerActivity.confirmRemoveForItem(category: WebsiteBlockerCategory) {
     if (uiState.isDownloadRunning || uiState.isCompileRunning) {
-        ClintToast.show(this, getString(R.string.filter_list_operation_in_progress))
+        Toast.makeText(this, getString(R.string.filter_list_operation_in_progress), Toast.LENGTH_SHORT).show()
         return
     }
     uiState.confirmDialog = ConfirmDialogConfig(
@@ -62,7 +62,7 @@ internal fun WebsiteBlockerActivity.copyCategoryName(category: WebsiteBlockerCat
     val clipboard = getSystemService(ClipboardManager::class.java)
     clipboard.setPrimaryClip(ClipData.newPlainText(getString(R.string.website_blocker_name_clip_label), categoryTitle(category)))
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
-        ClintToast.show(this, getString(R.string.filter_list_item_name_copied))
+        Toast.makeText(this, getString(R.string.filter_list_item_name_copied), Toast.LENGTH_SHORT).show()
     }
 }
 
@@ -70,7 +70,7 @@ internal fun WebsiteBlockerActivity.copyCategoryLink(category: WebsiteBlockerCat
     val clipboard = getSystemService(ClipboardManager::class.java)
     clipboard.setPrimaryClip(ClipData.newPlainText(getString(R.string.website_blocker_link_clip_label), category.downloadUrl))
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
-        ClintToast.show(this, getString(R.string.filter_list_item_link_copied))
+        Toast.makeText(this, getString(R.string.filter_list_item_link_copied), Toast.LENGTH_SHORT).show()
     }
 }
 
@@ -90,7 +90,7 @@ internal fun WebsiteBlockerActivity.confirmCheckUpdateForSelection() {
     val selection = selectedCategories()
     if (selection.isEmpty()) return
     if (uiState.isDownloadRunning || uiState.isCompileRunning) {
-        ClintToast.show(this, getString(R.string.filter_list_operation_in_progress))
+        Toast.makeText(this, getString(R.string.filter_list_operation_in_progress), Toast.LENGTH_SHORT).show()
         return
     }
     val downloaded = selection.filter { it.isDownloaded }
@@ -115,7 +115,7 @@ internal fun WebsiteBlockerActivity.confirmForceUpdateForSelection() {
     val selection = selectedCategories()
     if (selection.isEmpty()) return
     if (uiState.isDownloadRunning || uiState.isCompileRunning) {
-        ClintToast.show(this, getString(R.string.filter_list_operation_in_progress))
+        Toast.makeText(this, getString(R.string.filter_list_operation_in_progress), Toast.LENGTH_SHORT).show()
         return
     }
     val downloaded = selection.filter { it.isDownloaded }
@@ -154,7 +154,7 @@ internal fun WebsiteBlockerActivity.copySelectedCategoryNames() {
     val clipboard = getSystemService(ClipboardManager::class.java)
     clipboard.setPrimaryClip(ClipData.newPlainText(getString(R.string.website_blocker_name_clip_label), selection.joinToString("\n") { categoryTitle(it) }))
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
-        ClintToast.show(this, getString(R.string.filter_list_selection_names_copied))
+        Toast.makeText(this, getString(R.string.filter_list_selection_names_copied), Toast.LENGTH_SHORT).show()
     }
 }
 
@@ -164,7 +164,7 @@ internal fun WebsiteBlockerActivity.copySelectedCategoryLinks() {
     val clipboard = getSystemService(ClipboardManager::class.java)
     clipboard.setPrimaryClip(ClipData.newPlainText(getString(R.string.website_blocker_link_clip_label), selection.joinToString("\n") { it.downloadUrl }))
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
-        ClintToast.show(this, getString(R.string.filter_list_selection_links_copied))
+        Toast.makeText(this, getString(R.string.filter_list_selection_links_copied), Toast.LENGTH_SHORT).show()
     }
 }
 

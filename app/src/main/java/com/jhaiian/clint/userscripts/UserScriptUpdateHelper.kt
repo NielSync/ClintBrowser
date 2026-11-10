@@ -1,5 +1,6 @@
 package com.jhaiian.clint.userscripts
 
+import android.widget.Toast
 
 import com.jhaiian.clint.R
 import com.jhaiian.clint.ui.listscreen.ConfirmDialogConfig
@@ -8,7 +9,6 @@ import com.jhaiian.clint.quiver.UpdateResultUi
 import com.jhaiian.clint.util.formatFileSize
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
-import com.jhaiian.clint.ui.ClintToast
 
 internal fun UserScriptsActivity.showUserScriptUpdateConfirmation() {
     if (uiState.isUpdateRunning) return
@@ -105,11 +105,11 @@ internal fun UserScriptsActivity.startUserScriptUpdateCheck(
             onUserScriptUpdateCheckComplete(updatedResults, failedResults, upToDateCount)
         } catch (e: CancellationException) {
             uiState.updateProgress = null
-            ClintToast.show(this@startUserScriptUpdateCheck, getString(R.string.filter_list_update_cancelled))
+            Toast.makeText(this@startUserScriptUpdateCheck, getString(R.string.filter_list_update_cancelled), Toast.LENGTH_SHORT).show()
             throw e
         } catch (_: Exception) {
             uiState.updateProgress = null
-            ClintToast.show(this@startUserScriptUpdateCheck, getString(R.string.filter_list_update_error_generic))
+            Toast.makeText(this@startUserScriptUpdateCheck, getString(R.string.filter_list_update_error_generic), Toast.LENGTH_SHORT).show()
         } finally {
             uiState.isUpdateRunning = false
             uiState.updatingIds = emptySet()
@@ -127,10 +127,10 @@ private fun UserScriptsActivity.onUserScriptUpdateCheckComplete(
 
     when {
         updatedResults.isEmpty() && failedResults.isEmpty() -> {
-            ClintToast.show(this, getString(R.string.user_scripts_update_all_up_to_date))
+            Toast.makeText(this, getString(R.string.user_scripts_update_all_up_to_date), Toast.LENGTH_SHORT).show()
         }
         updatedResults.isNotEmpty() && failedResults.isEmpty() -> {
-            ClintToast.show(this, getString(R.string.user_scripts_update_success, updatedResults.size))
+            Toast.makeText(this, getString(R.string.user_scripts_update_success, updatedResults.size), Toast.LENGTH_SHORT).show()
         }
         updatedResults.isNotEmpty() && failedResults.isNotEmpty() -> {
             val failedNames = failedResults.joinToString(separator = "\n") { "• ${UserScriptMetadataParser.parse(it.script.code, "Untitled Script").name}" }
@@ -154,7 +154,7 @@ internal fun UserScriptsActivity.getActiveUserScripts(): List<UserScript> =
 
 internal fun UserScriptsActivity.showActiveUserScriptUpdateConfirmation(forceUpdate: Boolean) {
     if (uiState.isUpdateRunning) {
-        ClintToast.show(this, getString(R.string.filter_list_operation_in_progress))
+        Toast.makeText(this, getString(R.string.filter_list_operation_in_progress), Toast.LENGTH_SHORT).show()
         return
     }
     val activeScripts = getActiveUserScripts().filter { !it.isLocal }
@@ -189,7 +189,7 @@ internal fun UserScriptsActivity.showActiveUserScriptUpdateConfirmation(forceUpd
 
 internal fun UserScriptsActivity.showForceUpdateAllUserScriptsConfirmation() {
     if (uiState.isUpdateRunning) {
-        ClintToast.show(this, getString(R.string.filter_list_operation_in_progress))
+        Toast.makeText(this, getString(R.string.filter_list_operation_in_progress), Toast.LENGTH_SHORT).show()
         return
     }
     val updatableCount = uiState.scripts.count { !it.isLocal }

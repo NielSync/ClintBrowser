@@ -30,7 +30,6 @@ import com.jhaiian.clint.ui.ClintDialogActionFooter
 import com.jhaiian.clint.ui.ClintOutlinedTextField
 import com.jhaiian.clint.ui.theme.LocalClintColors
 import kotlinx.coroutines.launch
-import com.jhaiian.clint.ui.ClintToast
 
 @Composable
 fun DownloadRenameDialog(item: DownloadItem, hideStatusBar: Boolean, hideSystemNavigation: Boolean, onDismiss: () -> Unit) {
@@ -69,7 +68,7 @@ fun DownloadRenameDialog(item: DownloadItem, hideStatusBar: Boolean, hideSystemN
                                 busy = false
                             }
                             ClintDownloadManager.RenameResult.MISSING -> {
-                                ClintToast.show(context, R.string.download_file_missing)
+                                android.widget.Toast.makeText(context, R.string.download_file_missing, android.widget.Toast.LENGTH_SHORT).show()
                                 onDismiss()
                             }
                             ClintDownloadManager.RenameResult.FAILED -> {

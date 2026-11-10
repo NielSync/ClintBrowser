@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.provider.Settings
 import android.view.WindowManager
 import android.webkit.MimeTypeMap
+import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Box
@@ -37,7 +38,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import com.jhaiian.clint.ui.ClintToast
 
 class DownloadsActivity : ClintActivity(), OverlayHostActivity, SnackbarHostActivity, ConfirmDialogHostActivity {
 
@@ -253,7 +253,7 @@ class DownloadsActivity : ClintActivity(), OverlayHostActivity, SnackbarHostActi
             }
             uiState.deleteProgress = null
             uiState.exitSelectionMode()
-            ClintToast.show(this@DownloadsActivity, getString(R.string.downloads_items_removed))
+            Toast.makeText(this@DownloadsActivity, getString(R.string.downloads_items_removed), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -275,7 +275,7 @@ class DownloadsActivity : ClintActivity(), OverlayHostActivity, SnackbarHostActi
     internal fun handleOpenItem(item: DownloadItem) {
         if (item.status != DownloadStatus.COMPLETE) return
         if (!fileStillExists(item)) {
-            ClintToast.show(this, getString(R.string.download_file_missing))
+            Toast.makeText(this, getString(R.string.download_file_missing), Toast.LENGTH_SHORT).show()
             return
         }
         val ext = when {
@@ -358,7 +358,7 @@ class DownloadsActivity : ClintActivity(), OverlayHostActivity, SnackbarHostActi
         val clipboard = getSystemService(android.content.ClipboardManager::class.java)
         clipboard.setPrimaryClip(android.content.ClipData.newPlainText("", text))
         if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.TIRAMISU) {
-            ClintToast.show(this, toastMessage)
+            Toast.makeText(this, toastMessage, Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -464,7 +464,7 @@ class DownloadsActivity : ClintActivity(), OverlayHostActivity, SnackbarHostActi
         val clipboard = getSystemService(android.content.ClipboardManager::class.java)
         clipboard.setPrimaryClip(android.content.ClipData.newPlainText(getString(R.string.download_dialog_link_clip_label), item.mega?.link?.takeIf { it.isNotBlank() } ?: item.url))
         if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.TIRAMISU) {
-            ClintToast.show(this, getString(R.string.download_menu_link_copied))
+            Toast.makeText(this, getString(R.string.download_menu_link_copied), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -472,7 +472,7 @@ class DownloadsActivity : ClintActivity(), OverlayHostActivity, SnackbarHostActi
         val clipboard = getSystemService(android.content.ClipboardManager::class.java)
         clipboard.setPrimaryClip(android.content.ClipData.newPlainText(getString(R.string.download_menu_copy_filename), item.filename))
         if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.TIRAMISU) {
-            ClintToast.show(this, getString(R.string.download_menu_filename_copied))
+            Toast.makeText(this, getString(R.string.download_menu_filename_copied), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -496,7 +496,7 @@ class DownloadsActivity : ClintActivity(), OverlayHostActivity, SnackbarHostActi
         val clipboard = getSystemService(android.content.ClipboardManager::class.java)
         clipboard.setPrimaryClip(android.content.ClipData.newPlainText(getString(R.string.download_menu_copy_path), path))
         if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.TIRAMISU) {
-            ClintToast.show(this, getString(R.string.download_menu_path_copied))
+            Toast.makeText(this, getString(R.string.download_menu_path_copied), Toast.LENGTH_SHORT).show()
         }
     }
 
