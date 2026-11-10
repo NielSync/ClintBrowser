@@ -151,7 +151,7 @@ internal fun AddressBarRow(
                 modifier = Modifier.padding(end = 8.dp).size(20.dp)
             )
         }
-        if (activity.uiState.showSummarizeButton) {
+        if (activity.uiState.showSummarizeButton && !isIncognito) {
             // The quick-button slot holds either the summarize (flash) button or the
             // home button; the summarize toggle takes precedence when enabled.
             Box(
