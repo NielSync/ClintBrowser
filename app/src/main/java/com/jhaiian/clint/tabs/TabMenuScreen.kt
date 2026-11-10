@@ -91,6 +91,7 @@ import com.jhaiian.clint.browser.delegates.createTabGroupWithNewTab
 import com.jhaiian.clint.browser.delegates.onTabGroupsChanged
 import com.jhaiian.clint.browser.delegates.openNewTabInGroup
 import com.jhaiian.clint.browser.delegates.saveTabs
+import com.jhaiian.clint.browser.delegates.switchToTabMode
 import com.jhaiian.clint.ui.TabMenuOverflowMenu
 import com.jhaiian.clint.ui.TabSelectionOverflowMenu
 import com.jhaiian.clint.ui.listscreen.ClintSearchField
@@ -746,6 +747,10 @@ fun TabMenuScreen(activity: MainActivity, onDismiss: () -> Unit) {
             )
         }
 
+        // The left button is the mode switcher: it moves the browser to the other mode
+        // (most recent tab of that mode, or a fresh one). The right button creates a
+        // tab of the current mode.
+        val browserIncognito = tabs.firstOrNull { it.id == activeTabId }?.isIncognito == true
         val newTabButtons: @Composable () -> Unit = {
             Row(
                 Modifier.fillMaxWidth().padding(
@@ -756,16 +761,19 @@ fun TabMenuScreen(activity: MainActivity, onDismiss: () -> Unit) {
                 )
             ) {
                 NewTabButton(
-                    text = stringResource(R.string.new_tab),
-                    iconRes = Icons.Filled.Add,
+                    text = stringResource(if (browserIncognito) R.string.new_tab else R.string.incognito),
+                    iconRes = if (browserIncognito) Icons.Filled.Add else Icons.Filled.VisibilityOff,
                     modifier = Modifier.weight(1f).padding(end = 6.dp),
-                    onClick = { activity.onNewTab(); onDismiss() }
+                    onClick = { activity.switchToTabMode(browserIncognito) }
                 )
                 NewTabButton(
-                    text = stringResource(R.string.new_incognito_tab),
-                    iconRes = Icons.Filled.VisibilityOff,
+                    text = stringResource(if (browserIncognito) R.string.new_incognito_tab else R.string.new_tab),
+                    iconRes = if (browserIncognito) Icons.Filled.VisibilityOff else Icons.Filled.Add,
                     modifier = Modifier.weight(1f).padding(start = 6.dp),
-                    onClick = { activity.onNewIncognitoTab(); onDismiss() }
+                    onClick = {
+                        if (browserIncognito) activity.onNewIncognitoTab() else activity.onNewTab()
+                        onDismiss()
+                    }
                 )
             }
         }
