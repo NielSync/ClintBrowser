@@ -22,7 +22,9 @@ android {
         minSdk = 26
         targetSdk = 37
         versionCode = 46
-        versionName = "v1.2.6"
+        // Optional build tag: ./gradlew ... -PversionSuffix=-beta -> versionName "v1.2.6-beta"
+        val requestedVersionSuffix = (findProperty("versionSuffix") as String?)?.trim().orEmpty()
+        versionName = "v1.2.6$requestedVersionSuffix"
     }
 
     val hasSigningConfig = localProperties.getProperty("signingConfig.storePassword") != null
