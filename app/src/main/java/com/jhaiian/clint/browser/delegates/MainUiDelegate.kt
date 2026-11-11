@@ -385,9 +385,12 @@ internal fun MainActivity.updateNavigationState() {
 }
 
 internal fun MainActivity.updateTabCount() {
-    val count = tabManager.previews().size
-    uiState.tabCountText = if (count > 99) ":D" else count.toString()
-    com.jhaiian.clint.privacy.BrowsingDataCleaner.openTabCount = count
+    // The badge reflects the browsing mode of the active tab, so normal and incognito
+    // counts never mix; the combined total stays available for data-clearing UI.
+    val incognito = tabManager.activeTab?.isIncognito == true
+    val modeCount = tabManager.previews().count { it.isIncognito == incognito }
+    uiState.tabCountText = if (modeCount > 99) ":D" else modeCount.toString()
+    com.jhaiian.clint.privacy.BrowsingDataCleaner.openTabCount = tabManager.previews().size
     com.jhaiian.clint.privacy.IncognitoNotification.sync(this, tabManager.tabs.any { it.isIncognito })
     refreshTabGroupBar()
     refreshTabStrip()

@@ -936,6 +936,9 @@ class MainActivity : ClintActivity(), OverlayHostActivity, SnackbarHostActivity,
         openFindBar()
     }
     fun openSummarizeSheet() {
+        // AI summarization is disabled in incognito for privacy: the request would send
+        // page content to an external provider. The toolbar button is hidden here too.
+        if (uiState.isIncognito) return
         uiState.summarizeSheetOpen = true
     }
     fun onMenuTranslate() {
