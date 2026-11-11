@@ -44,6 +44,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Public
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Icon
@@ -261,7 +262,15 @@ fun TabMenuScreen(activity: MainActivity, onDismiss: () -> Unit) {
     var listView by remember { mutableStateOf(prefs.getBoolean(PREF_TAB_MENU_LIST_VIEW, false)) }
     var buttonsAtBottom by remember { mutableStateOf(prefs.getBoolean(PREF_TAB_MENU_BUTTONS_AT_BOTTOM, false)) }
     var tabsAtBottom by remember { mutableStateOf(prefs.getBoolean(PREF_TAB_MENU_TABS_AT_BOTTOM, false)) }
-    val hasDuplicates by remember { derivedStateOf { duplicateTabIds(tabs, activeTabId).isNotEmpty() } }
+    // Mode separation: the switcher displays one browsing mode at a time, opening on
+    // the mode of the active tab. Normal and incognito tabs are never listed together.
+    var switcherIncognito by remember { mutableStateOf(tabManager.activeTab?.isIncognito == true) }
+    val visibleTabs = tabs.filter { it.isIncognito == switcherIncognito }
+    val hasDuplicates by remember {
+        derivedStateOf {
+            duplicateTabIds(tabs.filter { it.isIncognito == switcherIncognito }, activeTabId).isNotEmpty()
+        }
+    }
 
     fun closeSearch() {
         searchActive = false
@@ -419,7 +428,7 @@ fun TabMenuScreen(activity: MainActivity, onDismiss: () -> Unit) {
     BoxWithConstraints(Modifier.fillMaxSize().background(colors.surface).statusBarsPadding().navigationBarsPadding()) {
         val columns = ((maxWidth - GridEdgePadding * 2) / if (listView) ListCellMinWidth else CellMinWidth).toInt().coerceAtLeast(1)
         val initialIndex = remember {
-            val renderList = buildRenderList(tabs, groups, columns, reversed = tabsAtBottom)
+            val renderList = buildRenderList(tabs.filter { it.isIncognito == switcherIncognito }, groups, columns, reversed = tabsAtBottom)
             val activeGroupId = tabs.firstOrNull { it.id == activeTabId }?.groupId
             val focusIndex = focusGroupId?.let { id -> renderList.indexOfFirst { it.key == groupHeaderKey(id) } } ?: -1
             val activeIndex = renderList.indexOfFirst { it is TabMenuItem.Tab && it.preview.id == activeTabId }
@@ -435,8 +444,9 @@ fun TabMenuScreen(activity: MainActivity, onDismiss: () -> Unit) {
         val renderList by remember(columns, tabsAtBottom) {
             derivedStateOf {
                 val query = searchQuery.trim()
+                val pool = tabs.filter { it.isIncognito == switcherIncognito }
                 buildRenderList(
-                    if (query.isEmpty()) tabs.toList() else tabs.filter { it.matchesQuery(query) },
+                    if (query.isEmpty()) pool else pool.filter { it.matchesQuery(query) },
                     groups,
                     columns,
                     forceCollapsed = dragState.draggingGroupId != null,
@@ -454,8 +464,8 @@ fun TabMenuScreen(activity: MainActivity, onDismiss: () -> Unit) {
             dragState.columns = columns
             dragState.mergeEnabled = groupsEnabled
         }
-        val shownGroups = visibleGroups(tabs, groups)
-        val groupCounts = tabs.groupingBy { it.groupId ?: "" }.eachCount()
+        val shownGroups = visibleGroups(visibleTabs, groups)
+        val groupCounts = visibleTabs.groupingBy { it.groupId ?: "" }.eachCount()
         val activeGroupId = tabs.firstOrNull { it.id == activeTabId }?.groupId
 
         LaunchedEffect(scrollToGroupId, renderList.size) {
@@ -691,7 +701,7 @@ fun TabMenuScreen(activity: MainActivity, onDismiss: () -> Unit) {
 
         val topBar: @Composable () -> Unit = {
             TabMenuTopBar(
-                tabCount = tabs.size,
+                tabCount = visibleTabs.size,
                 selectionMode = uiState.selectionMode,
                 selectedCount = uiState.selectedIds.size,
                 groupsEnabled = groupsEnabled,
@@ -713,8 +723,8 @@ fun TabMenuScreen(activity: MainActivity, onDismiss: () -> Unit) {
                     closeTabs(ids, activity.resources.getQuantityString(R.plurals.tab_menu_closed_duplicates, ids.size, ids.size))
                 }) else null,
                 onToggleSelectionMode = { uiState.selectionMode = true },
-                onSelectAll = { uiState.selectAll(tabs.map { it.id }) },
-                onInvertSelection = { uiState.invertSelection(tabs.map { it.id }) },
+                onSelectAll = { uiState.selectAll(visibleTabs.map { it.id }) },
+                onInvertSelection = { uiState.invertSelection(visibleTabs.map { it.id }) },
                 onDeleteSelected = { closeTabs(uiState.selectedIds.toList()); uiState.exitSelectionMode() },
                 onNewTab = { activity.onNewTab(); onDismiss() },
                 onNewIncognitoTab = { activity.onNewIncognitoTab(); onDismiss() },
@@ -733,7 +743,7 @@ fun TabMenuScreen(activity: MainActivity, onDismiss: () -> Unit) {
                         showProfilePicker = true
                     }
                 },
-                onCloseAllTabs = { closeTabs(tabs.map { it.id }) },
+                onCloseAllTabs = { closeTabs(visibleTabs.map { it.id }) },
                 buttonsAtBottom = buttonsAtBottom,
                 onToggleButtonsAtBottom = {
                     buttonsAtBottom = !buttonsAtBottom
@@ -747,10 +757,8 @@ fun TabMenuScreen(activity: MainActivity, onDismiss: () -> Unit) {
             )
         }
 
-        // The left button is the mode switcher: it moves the browser to the other mode
-        // (most recent tab of that mode, or a fresh one). The right button creates a
-        // tab of the current mode.
-        val browserIncognito = tabs.firstOrNull { it.id == activeTabId }?.isIncognito == true
+        // The left button switches which mode's tabs the switcher displays; the right
+        // button adds a new tab in the displayed mode.
         val newTabButtons: @Composable () -> Unit = {
             Row(
                 Modifier.fillMaxWidth().padding(
@@ -761,17 +769,21 @@ fun TabMenuScreen(activity: MainActivity, onDismiss: () -> Unit) {
                 )
             ) {
                 NewTabButton(
-                    text = stringResource(if (browserIncognito) R.string.new_tab else R.string.incognito),
-                    iconRes = if (browserIncognito) Icons.Filled.Add else Icons.Filled.VisibilityOff,
+                    text = stringResource(if (switcherIncognito) R.string.tab_menu_mode_tabs else R.string.incognito),
+                    iconRes = if (switcherIncognito) Icons.Filled.Public else Icons.Filled.VisibilityOff,
                     modifier = Modifier.weight(1f).padding(end = 6.dp),
-                    onClick = { activity.switchToTabMode(browserIncognito) }
+                    onClick = {
+                        switcherIncognito = !switcherIncognito
+                        uiState.exitSelectionMode()
+                        closeSearch()
+                    }
                 )
                 NewTabButton(
-                    text = stringResource(if (browserIncognito) R.string.new_incognito_tab else R.string.new_tab),
-                    iconRes = if (browserIncognito) Icons.Filled.VisibilityOff else Icons.Filled.Add,
+                    text = stringResource(if (switcherIncognito) R.string.new_incognito_tab else R.string.new_tab),
+                    iconRes = if (switcherIncognito) Icons.Filled.VisibilityOff else Icons.Filled.Add,
                     modifier = Modifier.weight(1f).padding(start = 6.dp),
                     onClick = {
-                        if (browserIncognito) activity.onNewIncognitoTab() else activity.onNewTab()
+                        if (switcherIncognito) activity.onNewIncognitoTab() else activity.onNewTab()
                         onDismiss()
                     }
                 )
@@ -821,8 +833,12 @@ fun TabMenuScreen(activity: MainActivity, onDismiss: () -> Unit) {
                     .weight(1f)
                     .onGloballyPositioned { dragState.gridOriginInRoot = it.positionInRoot() }
             ) {
-                if (tabs.isEmpty()) {
-                    Text(stringResource(R.string.no_tabs), color = colors.secondaryText, modifier = Modifier.align(Alignment.Center))
+                if (visibleTabs.isEmpty()) {
+                    Text(
+                        stringResource(if (switcherIncognito) R.string.tab_menu_no_incognito_tabs else R.string.no_tabs),
+                        color = colors.secondaryText,
+                        modifier = Modifier.align(Alignment.Center)
+                    )
                 } else if (renderList.isEmpty()) {
                     Text(
                         stringResource(R.string.tab_menu_search_no_results),
