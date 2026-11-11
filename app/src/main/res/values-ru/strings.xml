@@ -539,6 +539,8 @@
     <string name="summarize_shake_desc">Встряхните устройство, чтобы свести текущую страницу</string>
     <string name="menu_find_in_page">Найти на странице</string>
     <string name="menu_quick_toggles">Быстрые переключатели</string>
+    <string name="tab_menu_mode_tabs">Вкладки</string>
+    <string name="tab_menu_no_incognito_tabs">Нет приватных вкладок</string>
     <string name="find_in_page_hint">Найти на странице</string>
     <string name="find_previous_match">Предыдущее совпадение</string>
     <string name="find_next_match">Следующее совпадение</string>
