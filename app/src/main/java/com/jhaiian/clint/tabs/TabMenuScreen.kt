@@ -457,6 +457,7 @@ fun TabMenuScreen(activity: MainActivity, onDismiss: () -> Unit) {
         val shownGroups = visibleGroups(tabs, groups)
         val groupCounts = tabs.groupingBy { it.groupId ?: "" }.eachCount()
         val activeGroupId = tabs.firstOrNull { it.id == activeTabId }?.groupId
+        val browserIncognito = tabs.firstOrNull { it.id == activeTabId }?.isIncognito == true
 
         LaunchedEffect(scrollToGroupId, renderList.size) {
             val target = scrollToGroupId ?: return@LaunchedEffect
@@ -691,7 +692,7 @@ fun TabMenuScreen(activity: MainActivity, onDismiss: () -> Unit) {
 
         val topBar: @Composable () -> Unit = {
             TabMenuTopBar(
-                tabCount = tabs.size,
+                tabCount = tabs.count { it.isIncognito == browserIncognito },
                 selectionMode = uiState.selectionMode,
                 selectedCount = uiState.selectedIds.size,
                 groupsEnabled = groupsEnabled,
@@ -750,7 +751,6 @@ fun TabMenuScreen(activity: MainActivity, onDismiss: () -> Unit) {
         // The left button is the mode switcher: it moves the browser to the other mode
         // (most recent tab of that mode, or a fresh one). The right button creates a
         // tab of the current mode.
-        val browserIncognito = tabs.firstOrNull { it.id == activeTabId }?.isIncognito == true
         val newTabButtons: @Composable () -> Unit = {
             Row(
                 Modifier.fillMaxWidth().padding(
@@ -764,7 +764,10 @@ fun TabMenuScreen(activity: MainActivity, onDismiss: () -> Unit) {
                     text = stringResource(if (browserIncognito) R.string.new_tab else R.string.incognito),
                     iconRes = if (browserIncognito) Icons.Filled.Add else Icons.Filled.VisibilityOff,
                     modifier = Modifier.weight(1f).padding(end = 6.dp),
-                    onClick = { activity.switchToTabMode(browserIncognito) }
+                    onClick = {
+                        activity.switchToTabMode(!browserIncognito)
+                        syncFromManager()
+                    }
                 )
                 NewTabButton(
                     text = stringResource(if (browserIncognito) R.string.new_incognito_tab else R.string.new_tab),
