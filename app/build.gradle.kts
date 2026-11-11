@@ -60,7 +60,7 @@ android {
 
     buildTypes {
         release {
-            applicationIdSuffix = ".beta"
+            applicationIdSuffix = ".delta"
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
@@ -69,8 +69,8 @@ android {
             }
         }
         debug {
-            applicationIdSuffix = ".beta"
-            versionNameSuffix = "-beta"
+            applicationIdSuffix = ".delta"
+            versionNameSuffix = "-delta"
             isDebuggable = true
         }
     }
