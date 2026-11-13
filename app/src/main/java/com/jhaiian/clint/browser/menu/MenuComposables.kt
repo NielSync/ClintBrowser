@@ -431,7 +431,7 @@ private fun BrowserMenuContent(
             .background(colors.popupBackground)
             .padding(vertical = 6.dp)
     ) {
-        if (snapshot.showNavRow) {
+        if (snapshot.showNavRow && !snapshot.showNavRowAtBottom) {
             navRow()
             MenuDivider()
         }

@@ -139,21 +139,15 @@ fun MenuCustomizationScreen(
                                                 )
                                             }
                                         }
-                                        Column(Modifier.weight(1f).padding(start = 14.dp)) {
-                                            Text(
-                                                text = stringResource(R.string.menu_nav_panel_bottom_title),
-                                                color = colors.onSurface,
-                                                fontSize = 14.sp,
-                                                fontWeight = FontWeight.Medium
-                                            )
-                                            Text(
-                                                text = stringResource(R.string.menu_nav_panel_bottom_summary),
-                                                color = colors.secondaryText,
-                                                fontSize = 12.sp,
-                                                lineHeight = 15.sp,
-                                                modifier = Modifier.padding(top = 2.dp)
-                                            )
-                                        }
+                                        Text(
+                                            text = stringResource(R.string.menu_nav_panel_bottom_title),
+                                            color = colors.onSurface,
+                                            fontSize = 14.sp,
+                                            fontWeight = FontWeight.Medium,
+                                            maxLines = 1,
+                                            overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
+                                            modifier = Modifier.weight(1f).padding(start = 14.dp)
+                                        )
                                         ClintSwitch(checked = navPanelBottom)
                                     }
                                 }

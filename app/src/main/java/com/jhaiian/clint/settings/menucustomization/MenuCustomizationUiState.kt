@@ -12,6 +12,7 @@ class MenuCustomizationEntry(val item: CustomizableMenuItem, visible: Boolean) {
 
 class MenuCustomizationUiState(initialEntries: List<MenuCustomizationEntry>) {
     val entries = mutableStateListOf<MenuCustomizationEntry>().apply { addAll(initialEntries) }
+    var navPanelBottom by mutableStateOf(false)
 
     fun replaceAll(newEntries: List<MenuCustomizationEntry>) {
         entries.clear()

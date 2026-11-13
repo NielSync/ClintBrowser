@@ -533,8 +533,7 @@
     <string name="summarize_hide_api_key">Ocultar clave de API</string>
     <string name="summarize_shake">Agitar para resumir</string>
     <string name="summarize_shake_desc">Agita el dispositivo para resumir la página actual</string>
-    <string name="menu_nav_panel_bottom_title">Panel de navegación al final del menú</string>
-    <string name="menu_nav_panel_bottom_summary">Muestra también el panel de atrás, adelante, inicio, actualizar y marcadores al final del menú del navegador</string>
+    <string name="menu_nav_panel_bottom_title">Panel de navegación inferior</string>
     <string name="menu_find_in_page">Buscar en la página</string>
     <string name="menu_quick_toggles">Ajustes rápidos</string>
     <string name="tab_menu_mode_tabs">Pestañas</string>

@@ -47,6 +47,7 @@ class MenuCustomizationActivity : ClintActivity() {
         val hideSystemNavigation = prefs.getBoolean("hide_system_navigation", false)
 
         uiState = MenuCustomizationUiState(buildEntries(prefs))
+        uiState.navPanelBottom = prefs.getBoolean(PREF_NAV_PANEL_BOTTOM, false)
 
         setContent {
             ClintComposeTheme(theme = theme) {
@@ -57,8 +58,9 @@ class MenuCustomizationActivity : ClintActivity() {
                     MenuCustomizationScreen(
                         state = uiState,
                         maxContentWidth = maxContentWidth,
-                        navPanelBottom = prefs.getBoolean(PREF_NAV_PANEL_BOTTOM, false),
+                        navPanelBottom = uiState.navPanelBottom,
                         onNavPanelBottomToggle = { enabled ->
+                            uiState.navPanelBottom = enabled
                             prefs.edit().putBoolean(PREF_NAV_PANEL_BOTTOM, enabled).apply()
                         },
                         onExit = { finish() },

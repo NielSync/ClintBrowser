@@ -528,8 +528,7 @@
     <string name="summarize_hide_api_key">Sembunyikan kunci API</string>
     <string name="summarize_shake">Goyang untuk meringkas</string>
     <string name="summarize_shake_desc">Goyangkan perangkat untuk meringkas halaman saat ini</string>
-    <string name="menu_nav_panel_bottom_title">Panel navigasi di bawah menu</string>
-    <string name="menu_nav_panel_bottom_summary">Juga tampilkan panel kembali, maju, beranda, muat ulang dan penanda di bawah menu browser</string>
+    <string name="menu_nav_panel_bottom_title">Panel navigasi di bawah</string>
     <string name="menu_find_in_page">Temukan di halaman</string>
     <string name="menu_quick_toggles">Saklar cepat</string>
     <string name="tab_menu_mode_tabs">Tab</string>
