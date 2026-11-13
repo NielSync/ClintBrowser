@@ -5,6 +5,8 @@ import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Translate
 import androidx.compose.material.icons.filled.AutoDelete
+import androidx.compose.material.icons.filled.LowPriority
+import com.jhaiian.clint.settings.common.RowDivider
 import com.jhaiian.clint.tabs.InactiveTabsPolicy
 import androidx.compose.material.icons.filled.BrightnessHigh
 import androidx.compose.material.icons.filled.Gradient
@@ -64,6 +66,7 @@ fun BrowserSettingsScreen(
     onIncognitoSearchSuggestionsApiConfirmed: (String) -> Unit,
     onIncognitoCustomSearchSuggestionsApiSaved: (name: String, url: String) -> Unit,
     onSuggestionsShowHistoryClicked: () -> Unit,
+    onBackgroundTabsNewestFirstClicked: () -> Unit,
     onSuggestionsShowBookmarksClicked: () -> Unit,
     onJavascriptRowClicked: () -> Unit,
     onBackgroundPlaybackRowClicked: () -> Unit,
@@ -292,6 +295,15 @@ fun BrowserSettingsScreen(
                 summary = deleteInactiveTabsSummaryText(state.deleteInactiveTabs),
                 colors = colors,
                 onClick = { state.deleteInactiveTabsDialogOpen = true }
+            )
+            RowDivider(colors.divider)
+            SettingsRow(
+                icon = androidx.compose.material.icons.Icons.Filled.LowPriority,
+                title = stringResource(R.string.background_tabs_newest_first_title),
+                summary = stringResource(R.string.background_tabs_newest_first_summary),
+                colors = colors,
+                onClick = onBackgroundTabsNewestFirstClicked,
+                trailing = { ClintSwitch(checked = state.backgroundTabsNewestFirst) }
             )
         }
 

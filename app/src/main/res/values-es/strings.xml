@@ -363,7 +363,9 @@
     <string name="download_history_normal_summary">Conserva las descargas terminadas en tu lista de descargas. Los archivos se quedan de todos modos</string>
     <string name="download_history_incognito_title">Guardar historial de descargas de incógnito</string>
     <string name="download_history_incognito_summary">Conserva en tu lista de descargas lo que bajes desde pestañas de incógnito. Los archivos se quedan de todos modos</string>
-    <string name="download_section_general">GENERAL</string>
+
+    <string name="download_history_clear_on_exit_title">Borrar el historial de descargas al salir</string>
+    <string name="download_history_clear_on_exit_summary">Borra el historial de descargas guardado cuando el navegador se cierra. Se aplica por modo solo mientras el guardado de su historial esté activado.</string>    <string name="download_section_general">GENERAL</string>
     <string name="download_section_dialog_ui">CUADRO DE DESCARGA</string>
     <string name="download_dialog_ui_title">Interfaz</string>
     <string name="download_dialog_ui_standard">Estándar</string>
@@ -532,9 +534,12 @@
     <string name="summarize_show_api_key">Mostrar clave de API</string>
     <string name="summarize_hide_api_key">Ocultar clave de API</string>
     <string name="summarize_shake">Agitar para resumir</string>
+    <string name="menu_nav_panel_bottom_summary">Muestra también el panel de atrás, adelante, inicio, actualizar y marcadores al final del menú del navegador</string>
     <string name="summarize_shake_desc">Agita el dispositivo para resumir la página actual</string>
     <string name="menu_nav_panel_bottom_title">Panel de navegación inferior</string>
     <string name="menu_find_in_page">Buscar en la página</string>
+    <string name="background_tabs_newest_first_title">Pestañas en segundo plano más recientes primero</string>
+    <string name="background_tabs_newest_first_summary">Abre las pestañas en segundo plano justo después de la pestaña actual, con la más reciente primero.</string>
     <string name="menu_quick_toggles">Ajustes rápidos</string>
     <string name="tab_menu_mode_tabs">Pestañas</string>
     <string name="tab_menu_no_incognito_tabs">No hay pestañas de incógnito</string>

@@ -391,6 +391,7 @@ fun BrowserSettingsPane(activity: SettingsActivity, onTranslationsClick: () -> U
             initialIncognitoCustomSearchSuggestionsApiName = com.jhaiian.clint.browser.incognitoCustomSearchSuggestionsApiName(prefs),
             initialIncognitoCustomSearchSuggestionsApiUrl = com.jhaiian.clint.browser.incognitoCustomSearchSuggestionsApiUrlTemplate(prefs),
             initialSuggestionsShowHistory = prefs.getBoolean(com.jhaiian.clint.browser.suggestions.PREF_SUGGESTIONS_SHOW_HISTORY, true),
+            initialBackgroundTabsNewestFirst = prefs.getBoolean("background_tabs_newest_first", false),
             initialSuggestionsShowBookmarks = prefs.getBoolean(com.jhaiian.clint.browser.suggestions.PREF_SUGGESTIONS_SHOW_BOOKMARKS, true),
             initialJavascriptEnabled = prefs.getBoolean("javascript_enabled", true),
             initialBackgroundPlayback = com.jhaiian.clint.browser.media.BackgroundPlayback.isEnabled(prefs),
@@ -678,6 +679,12 @@ fun BrowserSettingsPane(activity: SettingsActivity, onTranslationsClick: () -> U
         uiState.suggestionsShowHistory = newValue
     }
 
+    fun onBackgroundTabsNewestFirstClicked() {
+        val newValue = !uiState.backgroundTabsNewestFirst
+        prefs.edit().putBoolean("background_tabs_newest_first", newValue).apply()
+        uiState.backgroundTabsNewestFirst = newValue
+    }
+
     fun onSuggestionsShowBookmarksClicked() {
         val newValue = !uiState.suggestionsShowBookmarks
         prefs.edit().putBoolean(com.jhaiian.clint.browser.suggestions.PREF_SUGGESTIONS_SHOW_BOOKMARKS, newValue).apply()
@@ -752,6 +759,7 @@ fun BrowserSettingsPane(activity: SettingsActivity, onTranslationsClick: () -> U
         onIncognitoSearchSuggestionsApiConfirmed = ::onIncognitoSearchSuggestionsApiConfirmed,
         onIncognitoCustomSearchSuggestionsApiSaved = ::onIncognitoCustomSearchSuggestionsApiSaved,
         onSuggestionsShowHistoryClicked = ::onSuggestionsShowHistoryClicked,
+        onBackgroundTabsNewestFirstClicked = ::onBackgroundTabsNewestFirstClicked,
         onSuggestionsShowBookmarksClicked = ::onSuggestionsShowBookmarksClicked,
         onJavascriptRowClicked = ::onJavascriptRowClicked,
         onBackgroundPlaybackRowClicked = ::onBackgroundPlaybackRowClicked,
@@ -1286,6 +1294,7 @@ fun DownloadSettingsPane(activity: SettingsActivity) {
             initialPushNotifications = prefs.getBoolean(DownloadSettingsKeys.PREF_PUSH_NOTIFICATIONS, DownloadSettingsKeys.DEFAULT_PUSH_NOTIFICATIONS),
             initialHistoryNormal = prefs.getBoolean(DownloadSettingsKeys.PREF_HISTORY_NORMAL, DownloadSettingsKeys.DEFAULT_HISTORY_NORMAL),
             initialHistoryIncognito = prefs.getBoolean(DownloadSettingsKeys.PREF_HISTORY_INCOGNITO, DownloadSettingsKeys.DEFAULT_HISTORY_INCOGNITO),
+            initialHistoryClearOnExit = prefs.getBoolean(DownloadSettingsKeys.PREF_HISTORY_CLEAR_ON_EXIT, false),
             initialKeepScreenOn = prefs.getBoolean(DownloadSettingsKeys.PREF_KEEP_SCREEN_ON, DownloadSettingsKeys.DEFAULT_KEEP_SCREEN_ON),
             initialDownloadLog = prefs.getBoolean(DownloadSettingsKeys.PREF_DOWNLOAD_LOG, DownloadSettingsKeys.DEFAULT_DOWNLOAD_LOG),
             initialQuickDownload = prefs.getBoolean(DownloadSettingsKeys.PREF_QUICK_DOWNLOAD, DownloadSettingsKeys.DEFAULT_QUICK_DOWNLOAD),
@@ -1478,6 +1487,11 @@ fun DownloadSettingsPane(activity: SettingsActivity) {
             val newValue = !uiState.historyIncognito
             prefs.edit().putBoolean(DownloadSettingsKeys.PREF_HISTORY_INCOGNITO, newValue).apply()
             uiState.historyIncognito = newValue
+        },
+        onHistoryClearOnExitClick = {
+            val newValue = !uiState.historyClearOnExit
+            prefs.edit().putBoolean(DownloadSettingsKeys.PREF_HISTORY_CLEAR_ON_EXIT, newValue).apply()
+            uiState.historyClearOnExit = newValue
         },
         onDownloadLogClick = {
             val newValue = !uiState.downloadLog

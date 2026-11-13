@@ -361,7 +361,9 @@
     <string name="download_history_normal_summary">पूरे हो चुके डाउनलोड आपकी डाउनलोड सूची में बने रहें. फ़ाइलें हर हाल में रहती हैं</string>
     <string name="download_history_incognito_title">गुप्त मोड की डाउनलोड हिस्ट्री सेव करें</string>
     <string name="download_history_incognito_summary">गुप्त टैब से पूरे हुए डाउनलोड आपकी डाउनलोड सूची में बने रहें. फ़ाइलें हर हाल में रहती हैं</string>
-    <string name="download_section_general">सामान्य</string>
+
+    <string name="download_history_clear_on_exit_title">बाहर निकलने पर डाउनलोड इतिहास साफ़ करें</string>
+    <string name="download_history_clear_on_exit_summary">ब्राउज़र बंद होने पर सहेजा गया डाउनलोड इतिहास साफ़ करें। प्रति मोड तभी लागू होता है जब उसका इतिहास सहेजना चालू हो।</string>    <string name="download_section_general">सामान्य</string>
     <string name="download_section_dialog_ui">डाउनलोड डायलॉग</string>
     <string name="download_dialog_ui_title">इंटरफ़ेस</string>
     <string name="download_dialog_ui_standard">सामान्य</string>
@@ -530,9 +532,12 @@
     <string name="summarize_show_api_key">API कुंजी दिखाएँ</string>
     <string name="summarize_hide_api_key">API कुंजी छिपाएँ</string>
     <string name="summarize_shake">सारांश के लिए हिलाएँ</string>
+    <string name="menu_nav_panel_bottom_summary">ब्राउज़र मेनू के नीचे भी बैक, फॉरवर्ड, होम, रिफ्रेश और बुकमार्क पैनल दिखाता है</string>
     <string name="summarize_shake_desc">वर्तमान पेज का सारांश बनाने के लिए डिवाइस हिलाएँ</string>
     <string name="menu_nav_panel_bottom_title">नैव पैनल नीचे</string>
     <string name="menu_find_in_page">पेज में खोजें</string>
+    <string name="background_tabs_newest_first_title">नवीनतम बैकग्राउंड टैब पहले</string>
+    <string name="background_tabs_newest_first_summary">बैकग्राउंड टैब को वर्तमान टैब के ठीक बाद खोलें, सबसे हाल ही में खोला गया पहले।</string>
     <string name="menu_quick_toggles">त्वरित टॉगल</string>
     <string name="tab_menu_mode_tabs">टैब</string>
     <string name="tab_menu_no_incognito_tabs">कोई गुप्त टैब नहीं</string>

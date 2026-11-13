@@ -207,6 +207,28 @@ object ClintDownloadManager {
 
     private fun startedInIncognito(): Boolean = incognitoSource?.invoke() == true
 
+    /**
+     * Clears the saved download history when the browser exits, for the modes whose
+     * history saving is enabled. Modes with history saving disabled have no recorded
+     * history to clear, which overrides this behavior for that mode.
+     */
+    fun clearDownloadHistoryOnExit(context: Context) {
+        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+        if (!prefs.getBoolean(DownloadSettingsKeys.PREF_HISTORY_CLEAR_ON_EXIT, false)) return
+        val incognitoRecorded = prefs.getBoolean(DownloadSettingsKeys.PREF_HISTORY_INCOGNITO, DownloadSettingsKeys.DEFAULT_HISTORY_INCOGNITO)
+        val normalRecorded = prefs.getBoolean(DownloadSettingsKeys.PREF_HISTORY_NORMAL, DownloadSettingsKeys.DEFAULT_HISTORY_NORMAL)
+        if (!incognitoRecorded && !normalRecorded) return
+        val ids = downloadsFlow.value.filter { item ->
+            (item.isIncognito && incognitoRecorded) || (!item.isIncognito && normalRecorded)
+        }.map { it.id }
+        if (ids.isEmpty()) return
+        ids.forEach {
+            removedIds.add(it)
+            applicationScope.launch { deletePersistedDownload(it) }
+        }
+        _downloads.update { list -> list.filterNot { it.id in ids } }
+    }
+
     fun recordsHistory(context: Context, isIncognito: Boolean): Boolean {
         val prefs = PreferenceManager.getDefaultSharedPreferences(context)
         return if (isIncognito) {

@@ -27,6 +27,7 @@ class TabManager {
         return tabs.indexOf(tab)
     }
 
+
     fun closeTab(index: Int) {
         if (index !in tabs.indices) return
         val tab = tabs[index]

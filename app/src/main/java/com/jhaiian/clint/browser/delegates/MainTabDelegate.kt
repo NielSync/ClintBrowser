@@ -247,7 +247,10 @@ internal fun MainActivity.openNewTabInBackground(url: String, openerTabId: Strin
     val webView = createWebView(isIncognito, WebProfiles.resolve(this, sourceProfile))
     val inheritedGroupId = if (isIncognito) null else sourceTab?.takeIf { !it.isIncognito }?.groupId
     val tab = BrowserTab(isIncognito = isIncognito, url = url, openerTabId = openerTabId, profileId = WebProfiles.profileOf(webView), groupId = inheritedGroupId, webView = webView)
-    tabManager.addInBackground(tab)
+    val bgIndex = tabManager.addInBackground(tab)
+    if (tab.groupId == null && prefs.getBoolean("background_tabs_newest_first", false)) {
+        tabManager.moveTab(bgIndex, tabManager.activeIndex + 1)
+    }
     if (isDesktopMode) addDesktopScript(tab)
     addAutoplayScript(tab)
     addSaveDataScript(tab)

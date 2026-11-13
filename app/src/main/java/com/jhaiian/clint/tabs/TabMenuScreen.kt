@@ -773,7 +773,9 @@ fun TabMenuScreen(activity: MainActivity, onDismiss: () -> Unit) {
                     iconRes = if (switcherIncognito) Icons.Filled.Public else Icons.Filled.VisibilityOff,
                     modifier = Modifier.weight(1f).padding(end = 6.dp),
                     onClick = {
+                        activity.switchToTabMode(!switcherIncognito)
                         switcherIncognito = !switcherIncognito
+                        syncFromManager()
                         uiState.exitSelectionMode()
                         closeSearch()
                     }

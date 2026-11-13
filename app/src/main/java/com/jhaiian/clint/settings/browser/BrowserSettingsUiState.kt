@@ -27,6 +27,7 @@ class BrowserSettingsUiState(
     initialIncognitoCustomSearchSuggestionsApiName: String,
     initialIncognitoCustomSearchSuggestionsApiUrl: String,
     initialSuggestionsShowHistory: Boolean,
+    initialBackgroundTabsNewestFirst: Boolean,
     initialSuggestionsShowBookmarks: Boolean,
     initialJavascriptEnabled: Boolean,
     initialBackgroundPlayback: Boolean,
@@ -63,6 +64,7 @@ class BrowserSettingsUiState(
     var incognitoCustomSearchSuggestionsApiName by mutableStateOf(initialIncognitoCustomSearchSuggestionsApiName)
     var incognitoCustomSearchSuggestionsApiUrl by mutableStateOf(initialIncognitoCustomSearchSuggestionsApiUrl)
     var suggestionsShowHistory by mutableStateOf(initialSuggestionsShowHistory)
+    var backgroundTabsNewestFirst by mutableStateOf(initialBackgroundTabsNewestFirst)
     var suggestionsShowBookmarks by mutableStateOf(initialSuggestionsShowBookmarks)
     var javascriptEnabled by mutableStateOf(initialJavascriptEnabled)
     var backgroundPlayback by mutableStateOf(initialBackgroundPlayback)

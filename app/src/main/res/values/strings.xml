@@ -361,7 +361,9 @@
     <string name="download_history_normal_summary">Keep finished downloads in your Downloads list. The files stay either way</string>
     <string name="download_history_incognito_title">Save Incognito download history</string>
     <string name="download_history_incognito_summary">Keep finished downloads from Incognito tabs in your Downloads list. The files stay either way</string>
-    <string name="download_section_general">GENERAL</string>
+
+    <string name="download_history_clear_on_exit_title">Clear download history on exit</string>
+    <string name="download_history_clear_on_exit_summary">Clear the saved download history when the browser exits. Applies per mode only while its history saving is on.</string>    <string name="download_section_general">GENERAL</string>
     <string name="download_section_dialog_ui">DOWNLOAD DIALOG</string>
     <string name="download_dialog_ui_title">UI</string>
     <string name="download_dialog_ui_standard">Standard</string>
@@ -533,8 +535,11 @@
     <string name="summarize_shake_desc">Shake the device to summarize the current page</string>
     <string name="menu_find_in_page">Find in page</string>
     <string name="menu_quick_toggles">Quick toggles</string>
+    <string name="background_tabs_newest_first_title">Newest background tabs first</string>
+    <string name="background_tabs_newest_first_summary">Open background tabs right after the current tab, with the most recently opened first.</string>
+    <string name="menu_nav_panel_bottom_summary">Also show the back, forward, home, refresh and bookmarks panel at the bottom of the browser menu</string>
     <string name="tab_menu_mode_tabs">Tabs</string>
-    <string name="menu_nav_panel_bottom_title">Bottom Nav panel</string>
+    <string name="menu_nav_panel_bottom_title">Bottom Nav Panel</string>
     <string name="tab_menu_no_incognito_tabs">No incognito tabs</string>
     <string name="find_in_page_hint">Find in page</string>
     <string name="find_previous_match">Previous match</string>

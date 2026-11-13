@@ -44,6 +44,10 @@ object PrivacyGuard {
         locked = prefs(app).getBoolean(PrivacyPrefs.APP_LOCK, PrivacyPrefs.DEFAULT_APP_LOCK)
         app.registerActivityLifecycleCallbacks(callbacks)
         if (prefs(app).getBoolean(PrivacyPrefs.EXIT_CLEAR_PENDING, false)) runExitClear(app)
+        if (prefs(app).getBoolean(PrivacyPrefs.DOWNLOAD_HISTORY_CLEAR_PENDING, false)) {
+            prefs(app).edit().putBoolean(PrivacyPrefs.DOWNLOAD_HISTORY_CLEAR_PENDING, false).apply()
+            com.jhaiian.clint.downloads.ClintDownloadManager.clearDownloadHistoryOnExit(app)
+        }
         clipboard(app).addPrimaryClipChangedListener { onClipChanged() }
     }
 
@@ -123,13 +127,21 @@ object PrivacyGuard {
         if (prefs.getBoolean(PrivacyPrefs.CLEAR_ON_EXIT, PrivacyPrefs.DEFAULT_CLEAR_ON_EXIT)) {
             prefs.edit().putBoolean(PrivacyPrefs.EXIT_CLEAR_PENDING, true).apply()
         }
+        if (prefs.getBoolean("download_history_clear_on_exit", false)) {
+            prefs.edit().putBoolean(PrivacyPrefs.DOWNLOAD_HISTORY_CLEAR_PENDING, true).apply()
+        }
     }
 
     private fun onExit(activity: Activity) {
         val prefs = prefs(activity)
-        if (!prefs.getBoolean(PrivacyPrefs.CLEAR_ON_EXIT, PrivacyPrefs.DEFAULT_CLEAR_ON_EXIT)) return
-        prefs.edit().putBoolean(PrivacyPrefs.EXIT_CLEAR_PENDING, true).commit()
-        runExitClear(activity.applicationContext)
+        if (prefs.getBoolean(PrivacyPrefs.CLEAR_ON_EXIT, PrivacyPrefs.DEFAULT_CLEAR_ON_EXIT)) {
+            prefs.edit().putBoolean(PrivacyPrefs.EXIT_CLEAR_PENDING, true).commit()
+            runExitClear(activity.applicationContext)
+        }
+        if (prefs.getBoolean("download_history_clear_on_exit", false)) {
+            prefs.edit().putBoolean(PrivacyPrefs.DOWNLOAD_HISTORY_CLEAR_PENDING, true).commit()
+            com.jhaiian.clint.downloads.ClintDownloadManager.clearDownloadHistoryOnExit(activity.applicationContext)
+        }
     }
 
     private fun showLock(activity: Activity) {

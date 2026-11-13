@@ -38,6 +38,7 @@ class DownloadSettingsUiState(
     initialAllFilesAccessGranted: Boolean,
     initialPushNotifications: Boolean,
     initialHistoryNormal: Boolean,
+    initialHistoryClearOnExit: Boolean,
     initialHistoryIncognito: Boolean,
     initialKeepScreenOn: Boolean,
     initialDownloadLog: Boolean,
@@ -82,6 +83,7 @@ initialHideSystemNavigation: Boolean
 
     var pushNotifications by mutableStateOf(initialPushNotifications)
     var historyNormal by mutableStateOf(initialHistoryNormal)
+    var historyClearOnExit by mutableStateOf(initialHistoryClearOnExit)
     var historyIncognito by mutableStateOf(initialHistoryIncognito)
     var keepScreenOn by mutableStateOf(initialKeepScreenOn)
     var downloadLog by mutableStateOf(initialDownloadLog)

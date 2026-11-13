@@ -74,6 +74,7 @@ import androidx.compose.material.icons.filled.KeyboardDoubleArrowDown
 import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.LowPriority
 import androidx.compose.material.icons.filled.ManageAccounts
 import androidx.compose.material.icons.filled.Mic
 import androidx.compose.material.icons.filled.Notifications
@@ -359,6 +360,7 @@ internal fun buildSettingsSearchEntries(context: Context): List<SettingsSearchEn
         item(R.string.search_suggestions_api, section = R.string.pref_category_search, icon = Icons.AutoMirrored.Filled.ManageSearch)
         item(R.string.suggestions_show_history_title, R.string.suggestions_show_history_summary, R.string.pref_category_search, icon = Icons.Filled.History)
         item(R.string.suggestions_show_bookmarks_title, R.string.suggestions_show_bookmarks_summary, R.string.pref_category_search, icon = Icons.Filled.Bookmark)
+        item(R.string.background_tabs_newest_first_title, R.string.background_tabs_newest_first_summary, R.string.pref_category_tabs, icon = Icons.Filled.LowPriority)
         item(
             R.string.delete_inactive_tabs_title, section = R.string.pref_category_tabs,
             extras = listOf(
@@ -474,6 +476,7 @@ internal fun buildSettingsSearchEntries(context: Context): List<SettingsSearchEn
         item(R.string.download_push_notifications_title, R.string.download_push_notifications_summary, R.string.download_section_notifications, icon = Icons.Filled.Notifications)
         item(R.string.download_history_normal_title, R.string.download_history_normal_summary, R.string.download_section_history, icon = Icons.Filled.History)
         item(R.string.download_history_incognito_title, R.string.download_history_incognito_summary, R.string.download_section_history, icon = Icons.Filled.VisibilityOff)
+        item(R.string.download_history_clear_on_exit_title, R.string.download_history_clear_on_exit_summary, R.string.download_section_history, icon = Icons.Filled.DeleteSweep)
         item(R.string.download_log_title, R.string.download_log_summary, R.string.download_section_history, icon = Icons.Filled.History)
         item(R.string.download_ignore_battery_opt_title, R.string.download_ignore_battery_opt_summary, R.string.download_section_permissions, icon = Icons.Filled.BatterySaver)
         if (!BuildConfig.IS_FOSS && Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {

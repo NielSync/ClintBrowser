@@ -18,6 +18,7 @@ object PrivacyPrefs {
     const val WEBRTC_PROTECTION = "webrtc_protection"
     const val GLOBAL_PRIVACY_CONTROL = "global_privacy_control"
     const val EXIT_CLEAR_PENDING = "exit_clear_pending"
+    const val DOWNLOAD_HISTORY_CLEAR_PENDING = "download_history_clear_pending"
 
     const val DEFAULT_STRIP_TRACKING_PARAMS = true
     const val DEFAULT_CLEAR_ON_EXIT = false

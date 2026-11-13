@@ -40,6 +40,7 @@ object DownloadSettingsKeys {
     const val PREF_HISTORY_NORMAL          = "download_history_normal"
     const val DEFAULT_HISTORY_NORMAL       = true
     const val PREF_HISTORY_INCOGNITO       = "download_history_incognito"
+    const val PREF_HISTORY_CLEAR_ON_EXIT   = "download_history_clear_on_exit"
     const val DEFAULT_HISTORY_INCOGNITO    = true
     const val PREF_QUICK_DOWNLOAD          = "download_quick_download"
     const val DEFAULT_QUICK_DOWNLOAD       = false

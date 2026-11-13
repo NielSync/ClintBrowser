@@ -5,6 +5,7 @@ import androidx.compose.material.icons.filled.BatterySaver
 import androidx.compose.material.icons.filled.BugReport
 import androidx.compose.material.icons.filled.Category
 import androidx.compose.material.icons.filled.CloudDownload
+import androidx.compose.material.icons.filled.DeleteSweep
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Folder
 import androidx.compose.material.icons.filled.FormatSize
@@ -104,6 +105,7 @@ fun DownloadSettingsScreen(
     onPushNotificationsClick: () -> Unit,
     onHistoryNormalClick: () -> Unit,
     onHistoryIncognitoClick: () -> Unit,
+    onHistoryClearOnExitClick: () -> Unit,
     onKeepScreenOnClick: () -> Unit,
     onDownloadLogClick: () -> Unit,
     onQuickDownloadClick: () -> Unit,
@@ -309,6 +311,15 @@ fun DownloadSettingsScreen(
                 colors = colors,
                 onClick = onHistoryIncognitoClick,
                 trailing = { ClintSwitch(checked = state.historyIncognito) }
+            )
+            RowDivider(colors.divider)
+            SettingsRow(
+                icon = androidx.compose.material.icons.Icons.Filled.DeleteSweep,
+                title = stringResource(R.string.download_history_clear_on_exit_title),
+                summary = stringResource(R.string.download_history_clear_on_exit_summary),
+                colors = colors,
+                onClick = onHistoryClearOnExitClick,
+                trailing = { ClintSwitch(checked = state.historyClearOnExit) }
             )
         }
 
