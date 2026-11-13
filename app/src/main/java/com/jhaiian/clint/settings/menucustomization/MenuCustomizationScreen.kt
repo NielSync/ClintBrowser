@@ -23,6 +23,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.DragHandle
+import androidx.compose.material.icons.filled.VerticalAlignBottom
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.RestartAlt
 import androidx.compose.material.icons.filled.Settings
@@ -60,6 +61,8 @@ import com.jhaiian.clint.ui.theme.LocalClintColors
 fun MenuCustomizationScreen(
     state: MenuCustomizationUiState,
     maxContentWidth: Dp?,
+    navPanelBottom: Boolean,
+    onNavPanelBottomToggle: (Boolean) -> Unit,
     onExit: () -> Unit,
     onToggleVisible: (String) -> Unit,
     onCommitReorder: (List<String>) -> Unit,
@@ -105,6 +108,57 @@ fun MenuCustomizationScreen(
                             modifier = Modifier.fillMaxSize(),
                             contentPadding = PaddingValues(horizontal = 12.dp, vertical = 4.dp)
                         ) {
+                            item(key = "nav_panel_bottom_toggle") {
+                                val colors = LocalClintColors.current
+                                Row(
+                                    Modifier
+                                        .fillMaxWidth()
+                                        .padding(bottom = 8.dp)
+                                        .clip(RoundedCornerShape(14.dp))
+                                        .background(colors.cardBackground)
+                                        .padding(start = 14.dp, end = 6.dp, top = 10.dp, bottom = 10.dp),
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Row(
+                                        Modifier.weight(1f).clickable(onClick = { onNavPanelBottomToggle(!navPanelBottom) }),
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+                                        Box(modifier = Modifier.size(34.dp), contentAlignment = Alignment.Center) {
+                                            Box(
+                                                modifier = Modifier
+                                                    .matchParentSize()
+                                                    .clip(RoundedCornerShape(10.dp))
+                                                    .background(colors.primary.copy(alpha = if (navPanelBottom) 0.12f else 0.06f)),
+                                                contentAlignment = Alignment.Center
+                                            ) {
+                                                Icon(
+                                                    imageVector = androidx.compose.material.icons.Icons.Filled.VerticalAlignBottom,
+                                                    contentDescription = null,
+                                                    tint = if (navPanelBottom) colors.primary else colors.secondaryText,
+                                                    modifier = Modifier.size(18.dp)
+                                                )
+                                            }
+                                        }
+                                        Column(Modifier.weight(1f).padding(start = 14.dp)) {
+                                            Text(
+                                                text = stringResource(R.string.menu_nav_panel_bottom_title),
+                                                color = colors.onSurface,
+                                                fontSize = 14.sp,
+                                                fontWeight = FontWeight.Medium
+                                            )
+                                            Text(
+                                                text = stringResource(R.string.menu_nav_panel_bottom_summary),
+                                                color = colors.secondaryText,
+                                                fontSize = 12.sp,
+                                                lineHeight = 15.sp,
+                                                modifier = Modifier.padding(top = 2.dp)
+                                            )
+                                        }
+                                        ClintSwitch(checked = navPanelBottom)
+                                    }
+                                }
+                            }
+
                             items(entries, key = { menuItemDragKey(it.item.id) }) { entry ->
                                 val isDragging = dragState.draggingId == entry.item.id
                                 val ghostAlpha by animateFloatAsState(if (isDragging) 0.2f else 1f, label = "menuItemGhostAlpha")

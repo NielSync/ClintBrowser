@@ -537,6 +537,8 @@
     <string name="summarize_hide_api_key">Скрыть API-ключ</string>
     <string name="summarize_shake">Встряхнуть для сводки</string>
     <string name="summarize_shake_desc">Встряхните устройство, чтобы свести текущую страницу</string>
+    <string name="menu_nav_panel_bottom_title">Панель навигации внизу меню</string>
+    <string name="menu_nav_panel_bottom_summary">Также показывает панель «назад, вперёд, домой, обновить и закладки» внизу меню браузера</string>
     <string name="menu_find_in_page">Найти на странице</string>
     <string name="menu_quick_toggles">Быстрые переключатели</string>
     <string name="tab_menu_mode_tabs">Вкладки</string>

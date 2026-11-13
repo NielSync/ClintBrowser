@@ -531,6 +531,8 @@
     <string name="summarize_hide_api_key">API कुंजी छिपाएँ</string>
     <string name="summarize_shake">सारांश के लिए हिलाएँ</string>
     <string name="summarize_shake_desc">वर्तमान पेज का सारांश बनाने के लिए डिवाइस हिलाएँ</string>
+    <string name="menu_nav_panel_bottom_title">मेनू में नैव पैनल नीचे</string>
+    <string name="menu_nav_panel_bottom_summary">ब्राउज़र मेनू के नीचे भी बैक, फॉरवर्ड, होम, रिफ्रेश और बुकमार्क पैनल दिखाता है</string>
     <string name="menu_find_in_page">पेज में खोजें</string>
     <string name="menu_quick_toggles">त्वरित टॉगल</string>
     <string name="tab_menu_mode_tabs">टैब</string>

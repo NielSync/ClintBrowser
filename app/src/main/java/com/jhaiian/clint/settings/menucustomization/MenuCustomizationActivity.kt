@@ -22,6 +22,10 @@ class MenuCustomizationActivity : ClintActivity() {
 
     private lateinit var uiState: MenuCustomizationUiState
 
+    companion object {
+        const val PREF_NAV_PANEL_BOTTOM = "menu_nav_panel_bottom"
+    }
+
     private fun buildEntries(prefs: android.content.SharedPreferences): List<MenuCustomizationEntry> {
         val order = BrowserMenuCustomizationStore.readOrder(prefs)
         val hidden = BrowserMenuCustomizationStore.readHidden(prefs)
@@ -53,6 +57,10 @@ class MenuCustomizationActivity : ClintActivity() {
                     MenuCustomizationScreen(
                         state = uiState,
                         maxContentWidth = maxContentWidth,
+                        navPanelBottom = prefs.getBoolean(PREF_NAV_PANEL_BOTTOM, false),
+                        onNavPanelBottomToggle = { enabled ->
+                            prefs.edit().putBoolean(PREF_NAV_PANEL_BOTTOM, enabled).apply()
+                        },
                         onExit = { finish() },
                         onToggleVisible = { id ->
                             val entry = uiState.entries.find { it.item.id == id }

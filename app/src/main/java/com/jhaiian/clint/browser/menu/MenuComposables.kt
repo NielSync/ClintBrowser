@@ -117,6 +117,7 @@ internal data class BrowserMenuPageState(
 internal data class BrowserMenuSnapshot(
     val url: String,
     val showNavRow: Boolean,
+    val showNavRowAtBottom: Boolean,
     val canGoBack: Boolean,
     val canGoForward: Boolean,
     val page: BrowserMenuPageState,
@@ -198,6 +199,7 @@ internal fun MainActivity.buildMenuSnapshot(previous: BrowserMenuSnapshot?): Bro
     return BrowserMenuSnapshot(
         url = currentUrl,
         showNavRow = position != "split",
+        showNavRowAtBottom = prefs.getBoolean("menu_nav_panel_bottom", false),
         canGoBack = wv?.canGoBack() == true,
         canGoForward = wv?.canGoForward() == true,
         page = page,
@@ -401,6 +403,28 @@ private fun BrowserMenuContent(
 ) {
     val colors = LocalClintColors.current
     var togglesExpanded by remember { mutableStateOf(false) }
+    val navRow: @Composable () -> Unit = {
+        Row(
+            modifier = Modifier.fillMaxWidth()
+                .padding(horizontal = 8.dp, vertical = 4.dp)
+                .clip(RoundedCornerShape(14.dp))
+                .background(colors.surfaceVariant)
+                .height(52.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            MenuNavIcon(androidx.compose.material.icons.Icons.AutoMirrored.Filled.ArrowBack, stringResource(R.string.back), snapshot.canGoBack, actions.onGoBack)
+            MenuNavIcon(androidx.compose.material.icons.Icons.AutoMirrored.Filled.ArrowForward, stringResource(R.string.forward), snapshot.canGoForward, actions.onGoForward)
+            MenuNavIcon(androidx.compose.material.icons.Icons.Filled.Home, stringResource(R.string.home), true, actions.onHome)
+            MenuNavIcon(
+                if (snapshot.isLoading) androidx.compose.material.icons.Icons.Filled.Close else androidx.compose.material.icons.Icons.Filled.Refresh,
+                stringResource(R.string.refresh), true, actions.onRefreshOrStop
+            )
+            MenuNavIcon(
+                if (snapshot.page.isBookmarked) androidx.compose.material.icons.Icons.Filled.Bookmark else androidx.compose.material.icons.Icons.Filled.BookmarkBorder,
+                stringResource(R.string.content_desc_bookmark), true, actions.onToggleBookmark
+            )
+        }
+    }
     Column(
         modifier = modifier
             .clip(RoundedCornerShape(16.dp))
@@ -408,26 +432,7 @@ private fun BrowserMenuContent(
             .padding(vertical = 6.dp)
     ) {
         if (snapshot.showNavRow) {
-            Row(
-                modifier = Modifier.fillMaxWidth()
-                    .padding(horizontal = 8.dp, vertical = 4.dp)
-                    .clip(RoundedCornerShape(14.dp))
-                    .background(colors.surfaceVariant)
-                    .height(52.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                MenuNavIcon(androidx.compose.material.icons.Icons.AutoMirrored.Filled.ArrowBack, stringResource(R.string.back), snapshot.canGoBack, actions.onGoBack)
-                MenuNavIcon(androidx.compose.material.icons.Icons.AutoMirrored.Filled.ArrowForward, stringResource(R.string.forward), snapshot.canGoForward, actions.onGoForward)
-                MenuNavIcon(androidx.compose.material.icons.Icons.Filled.Home, stringResource(R.string.home), true, actions.onHome)
-                MenuNavIcon(
-                    if (snapshot.isLoading) androidx.compose.material.icons.Icons.Filled.Close else androidx.compose.material.icons.Icons.Filled.Refresh,
-                    stringResource(R.string.refresh), true, actions.onRefreshOrStop
-                )
-                MenuNavIcon(
-                    if (snapshot.page.isBookmarked) androidx.compose.material.icons.Icons.Filled.Bookmark else androidx.compose.material.icons.Icons.Filled.BookmarkBorder,
-                    stringResource(R.string.content_desc_bookmark), true, actions.onToggleBookmark
-                )
-            }
+            navRow()
             MenuDivider()
         }
         val items = snapshot.visibleMenuItems
@@ -457,6 +462,10 @@ private fun BrowserMenuContent(
         }
         MenuDivider()
         MenuItemRow(androidx.compose.material.icons.Icons.Filled.Settings, stringResource(R.string.settings), onClick = actions.onSettings)
+        if (snapshot.showNavRow && snapshot.showNavRowAtBottom) {
+            MenuDivider()
+            navRow()
+        }
     }
 }
 

@@ -530,6 +530,8 @@
     <string name="summarize_hide_api_key">Itago ang API key</string>
     <string name="summarize_shake">Shake para i-summarize</string>
     <string name="summarize_shake_desc">I-shake ang device para i-summarize ang kasalukuyang page</string>
+    <string name="menu_nav_panel_bottom_title">Nav panel sa ilalim ng menu</string>
+    <string name="menu_nav_panel_bottom_summary">Ipinapakita rin ang panel ng back, forward, home, refresh at bookmarks sa ilalim ng browser menu</string>
     <string name="menu_find_in_page">Maghanap sa pahina</string>
     <string name="menu_quick_toggles">Mga pag-toggle</string>
     <string name="tab_menu_mode_tabs">Mga tab</string>
